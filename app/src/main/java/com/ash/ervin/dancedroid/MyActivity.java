@@ -1,9 +1,12 @@
 package com.ash.ervin.dancedroid;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import java.util.Timer;
+import java.util.TimerTask;
 import android.widget.Toast;
 import android.graphics.Color;
 
@@ -11,7 +14,10 @@ import java.util.ArrayList;
 
 public class MyActivity extends AppCompatActivity {
 
-    //
+    // Time vars
+    Timer timer;
+
+    // Buttons
     ArrayList<Button> buttonList = new ArrayList<>();
     Button one;
     Button two;
@@ -27,6 +33,12 @@ public class MyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
         addButtons();
+        one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         addClickListeners();
         four.setBackgroundColor(Color.BLUE);
 
@@ -51,6 +63,14 @@ public class MyActivity extends AppCompatActivity {
         buttonList.add(six);
         buttonList.add(seven);
         buttonList.add(eight);
+    }
+
+    private void turnOffBtn(Button button){
+        button.setBackgroundColor(Color.GRAY);
+    }
+
+    private void turnOnBtn(Button button){
+        button.setBackgroundColor(Color.BLUE);
     }
 
     private void addClickListeners() {
