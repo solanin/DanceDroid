@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import java.awt.Toolkit;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,8 +12,7 @@ import java.util.ArrayList;
 
 public class MyActivity extends AppCompatActivity {
 
-    // Time vars
-    Toolkit toolkit;
+    // Time vars\
     Timer timer;
 
     // Buttons
@@ -70,13 +68,6 @@ public class MyActivity extends AppCompatActivity {
 
     private void turnOnBtn(Button button){
         button.setBackgroundColor(Color.BLUE);
-    }
-
-    public AnnoyingBeep() {
-        toolkit = Toolkit.getDefaultToolkit();
-        timer = new Timer();
-        timer.schedule(new FindButton(), 0, //initial delay
-                1 * 1000); //subsequent rate
     }
 
 
