@@ -4,13 +4,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MyActivity extends AppCompatActivity {
 
     //
-    ArrayList<Button, boolean> buttonList = new ArrayList<>();
+    ArrayList<Button> buttonList = new ArrayList<>();
     Button one;
     Button two;
     Button three;
@@ -25,14 +26,7 @@ public class MyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
         addButtons();
-
-        one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
+        addClickListeners();
 
     }
     //creates buttons and puts them in the button list
@@ -55,5 +49,79 @@ public class MyActivity extends AppCompatActivity {
         buttonList.add(six);
         buttonList.add(seven);
         buttonList.add(eight);
+    }
+
+    private void addClickListeners() {
+        one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "One pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        two.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "Two pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        three.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "Three pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        four.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "Four pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        five.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "Five pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        six.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "Six pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        seven.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "Seven pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        eight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MyActivity.this,
+                        "Eight pressed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
