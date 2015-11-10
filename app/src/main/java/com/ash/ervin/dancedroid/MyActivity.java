@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.widget.Toast;
@@ -14,7 +16,11 @@ import java.util.ArrayList;
 public class MyActivity extends AppCompatActivity {
 
     // Time vars
-    Timer timer;
+    int timer;
+    long interval;
+    Button currentBtn;
+    Button lastBtn;
+    Random rand;
 
     // Buttons
     ArrayList<Button> buttonList = new ArrayList<>();
@@ -40,6 +46,9 @@ public class MyActivity extends AppCompatActivity {
         });
         addClickListeners();
 
+        rand = new Random();
+        interval = 100;
+        timer = 0;
     }
     //creates buttons and puts them in the button list
     //in a slow way that should probably be optimized somehow
@@ -144,4 +153,20 @@ public class MyActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Outline of how this will work
+    public void update() {
+        timer++;
+
+        if (timer > interval) {
+            lastBtn = currentBtn;
+            currentBtn = buttonList.get(rand.nextInt(buttonList.size()));
+
+            if(lastBtn != null) turnOffBtn(lastBtn);
+            if(currentBtn != null) turnOnBtn(currentBtn);
+
+            timer = 0;
+        }
+    }
 }
+
