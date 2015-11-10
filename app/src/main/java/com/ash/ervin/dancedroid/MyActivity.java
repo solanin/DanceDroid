@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class MyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my);
         addButtons();
         addClickListeners();
+        four.setBackgroundColor(Color.BLUE);
 
     }
     //creates buttons and puts them in the button list
@@ -85,6 +87,7 @@ public class MyActivity extends AppCompatActivity {
                 Toast.makeText(MyActivity.this,
                         "Four pressed",
                         Toast.LENGTH_SHORT).show();
+                four.setBackgroundColor(Color.GRAY);
             }
         });
 
