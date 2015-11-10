@@ -2,6 +2,7 @@ package com.ash.ervin.dancedroid;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class MyActivity extends AppCompatActivity {
 
     //
-    ArrayList<Button> buttonList = new ArrayList<>();
+    ArrayList<Button, boolean> buttonList = new ArrayList<>();
     Button one;
     Button two;
     Button three;
@@ -25,6 +26,14 @@ public class MyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my);
         addButtons();
 
+        one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
+
     }
     //creates buttons and puts them in the button list
     //in a slow way that should probably be optimized somehow
@@ -36,6 +45,7 @@ public class MyActivity extends AppCompatActivity {
         five = (Button) findViewById(R.id.button_five);
         six = (Button) findViewById(R.id.button_six);
         seven = (Button) findViewById(R.id.button_seven);
+        eight = (Button) findViewById(R.id.button_eight);
 
         buttonList.add(one);
         buttonList.add(two);
@@ -44,5 +54,6 @@ public class MyActivity extends AppCompatActivity {
         buttonList.add(five);
         buttonList.add(six);
         buttonList.add(seven);
+        buttonList.add(eight);
     }
 }
