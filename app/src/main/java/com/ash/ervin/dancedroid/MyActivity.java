@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import android.widget.Toast;
+import android.graphics.Color;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,7 @@ public class MyActivity extends AppCompatActivity {
             }
         });
         addClickListeners();
+        four.setBackgroundColor(Color.BLUE);
 
         rand = new Random();
         interval = 100;
@@ -114,6 +116,7 @@ public class MyActivity extends AppCompatActivity {
                 Toast.makeText(MyActivity.this,
                         "Four pressed",
                         Toast.LENGTH_SHORT).show();
+                four.setBackgroundColor(Color.GRAY);
             }
         });
 
