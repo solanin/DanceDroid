@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">JCW Defender</string>
+
+    <string name="high_score">Fastest Time: </string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_game">GameActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+</resources>
