@@ -9,8 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends Activity
-        implements View.OnClickListener {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,41 @@ public class MainActivity extends Activity
         // Set up Play Button
         final Button buttonPlay =
                 (Button)findViewById(R.id.btnPlay);
-        buttonPlay.setOnClickListener(this);
+        buttonPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create a new Intent object, and switch activities
+                Intent i = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        // Set up Settings Button
+        final Button buttonSettings =
+                (Button)findViewById(R.id.btnSettings);
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create a new Intent object, and switch activities
+                Intent i = new Intent(MainActivity.this, Settings.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        // Set up Credits Button
+        final Button buttonCredits =
+                (Button)findViewById(R.id.btnCredits);
+        buttonCredits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create a new Intent object, and switch activities
+                Intent i = new Intent(MainActivity.this, Credits.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         // Fastest Time
         SharedPreferences prefs;
@@ -33,14 +66,5 @@ public class MainActivity extends Activity
         // Set
         final TextView textFastestTime = (TextView)findViewById(R.id.txtHighScore);
         textFastestTime.setText("Fastest Time:" + fastestTime);
-    }
-
-    @Override
-    public void onClick(View v) {
-        // The Play Btn (Its the only button er wet up)
-        // Create a new Intent object, and switch activities
-        Intent i = new Intent(this, GameActivity.class);
-        startActivity(i);
-        finish();
     }
 }

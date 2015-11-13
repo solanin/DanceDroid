@@ -6,4 +6,29 @@
     <string name="title_activity_game">GameActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="play">Play</string>
+    <string name="settings">Settings</string>
+    <string name="credits">Credits</string>
+    <string name="back">Back</string>
+    <string name="creditsPage">Game Created and made by \nAshley Ervin and Jacob Westerback</string>
+
+    <string name="modeSelect">Mode Select</string>
+    <string name="modeArcade">Arcade</string>
+    <string name="modeZen">Zen</string>
+    <string name="modeTimed">Timed</string>
+    <string name="difficultyEasy">Easy</string>
+    <string name="difficultyMedium">Hard</string>
+    <string name="difficultyHard">Extreme</string>
+
+
+    <string name="score">Score</string>
+    <string name="combo">Combo</string>
+    <string name="pause">Pause</string>
+    <string name="paused">Paused</string>
+    <string name="title_activity_credits">Credits</string>
+
+    <color name="background">#000000</color>
+    <color name="text">#ffffff</color>
+    <string name="title_activity_settings">Settings</string>
+
 </resources>
