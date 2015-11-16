@@ -41,6 +41,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Game Objs
     public Beat beat1;
+    public Rect tapBox;
 
     // Drawing Objs
     private Paint paint;
@@ -78,6 +79,8 @@ public class TDView extends SurfaceView implements Runnable{
 
         beat1 = new Beat(context, screenX, screenY);
 
+        tapBox = new Rect(0,screenY-200,screenX,screenY);
+
         // Reset time and distance
         distanceRemaining = 10000;// 10 km
         timeTaken = 0;
@@ -99,6 +102,15 @@ public class TDView extends SurfaceView implements Runnable{
     }
 
     private void update(){
+
+        // Collision detection on new positions
+        // Before move because we are testing last frames
+        // position which has just been drawn
+        boolean hitDetected = false;
+        if(Rect.intersects(tapBox, beat1.getHitbox())){
+            hitDetected = true;
+            beat1.tapped();
+        }
 
         // Update the player & enemies
         beat1.update();
@@ -127,14 +139,28 @@ public class TDView extends SurfaceView implements Runnable{
             /*
             // Switch to white pixels
             paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawRect(player.getHitbox().left,
-                    player.getHitbox().top,
-                    player.getHitbox().right,
-                    player.getHitbox().bottom,
+            canvas.drawRect(beat1.getHitbox().left,
+                    beat1.getHitbox().top,
+                    beat1.getHitbox().right,
+                    beat1.getHitbox().bottom,
                     paint);
             */
 
-            // Draw player & enemies
+            // Draw Tapbox
+            paint.setColor(Color.argb(255, 255, 255, 255));
+            canvas.drawRect(tapBox.left,
+                    tapBox.top,
+                    tapBox.right,
+                    tapBox.bottom,
+                    paint);
+
+            // Draw beats
+            paint.setColor(Color.argb(0, 0, 150, 255));
+            if (beat1.getTapped()) { canvas.drawRect(beat1.getHitbox().left,
+                    beat1.getHitbox().top,
+                    beat1.getHitbox().right,
+                    beat1.getHitbox().bottom,
+                    paint); }
             canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
 
             if(!gameEnded) {
