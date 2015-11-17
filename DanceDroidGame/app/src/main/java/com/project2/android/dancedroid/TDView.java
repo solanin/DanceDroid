@@ -51,6 +51,9 @@ public class TDView extends SurfaceView implements Runnable{
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
+    //Access SoundManager
+    SoundManager mSoundManager;
+
 
     public TDView(Context context, int x, int y) {
         super(context);
@@ -70,6 +73,9 @@ public class TDView extends SurfaceView implements Runnable{
         // Load fastest time
         // if not available our highscore = 1000000
         fastestTime = prefs.getLong("fastestTime", 1000000);
+
+        mSoundManager = new SoundManager(R.raw.pianotune, context);
+
 
         startGame();
     }
@@ -102,7 +108,7 @@ public class TDView extends SurfaceView implements Runnable{
 
         // Update the player & enemies
         beat1.update();
-
+        mSoundManager.PlayMusic(1.0f);
         if(!gameEnded) {
             //subtract distance to home planet based on current speed
             distanceRemaining -= 1;

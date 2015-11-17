@@ -1,8 +1,10 @@
 package com.project2.android.dancedroid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +17,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+      //  getSystemService(Context.AUDIO_SERVICE).getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
         // Set up Play Button
         final Button buttonPlay =
                 (Button)findViewById(R.id.btnPlay);
