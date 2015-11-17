@@ -25,12 +25,15 @@ public class Beat {
 
     // A hit box for collision detection
     private Rect hitBox;
+    private boolean tapped;
 
     //Getters and Setters
     public Bitmap getBitmap(){ return bitmap; }
     public int getX() { return x; }
     public int getY() { return y; }
     public Rect getHitbox(){ return hitBox; }
+    public boolean getTapped(){ return tapped; }
+    public void tapped(){ tapped = true; }
 
     // This is used by the TDView update() method to
     // Make an enemy out of bounds and force a re-spawn
@@ -55,6 +58,7 @@ public class Beat {
 
         // Init the hit box
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        tapped = false;
     }
 
     public void update() {
@@ -67,6 +71,7 @@ public class Beat {
             x = generator.nextInt(maxX) - bitmap.getWidth();
             if (x < bitmap.getWidth()) { x = bitmap.getWidth(); }
             y = 0-bitmap.getHeight();
+            tapped = false;
         }
 
         // Refresh
