@@ -85,7 +85,7 @@ public class TDView extends SurfaceView implements Runnable{
 
         beat1 = new Beat(context, screenX, screenY);
 
-        tapBox = new Rect(0,screenY-200,screenX,screenY);
+        tapBox = new Rect(0,screenY/2,screenX,(screenY/2)+200);
 
         // Reset time and distance
         distanceRemaining = 10000;// 10 km
@@ -153,7 +153,7 @@ public class TDView extends SurfaceView implements Runnable{
             */
 
             // Draw Tapbox
-            paint.setColor(Color.argb(255, 255, 255, 255));
+            paint.setColor(Color.argb(90, 255, 255, 255));
             canvas.drawRect(tapBox.left,
                     tapBox.top,
                     tapBox.right,
@@ -161,12 +161,13 @@ public class TDView extends SurfaceView implements Runnable{
                     paint);
 
             // Draw beats
-            paint.setColor(Color.argb(0, 0, 150, 255));
-            if (beat1.getTapped()) { canvas.drawRect(beat1.getHitbox().left,
+            //paint.setColor(Color.argb(0, 0, 150, 255));
+            //if (beat1.getTapped()) {
+                canvas.drawRect(beat1.getHitbox().left,
                     beat1.getHitbox().top,
                     beat1.getHitbox().right,
                     beat1.getHitbox().bottom,
-                    paint); }
+                    paint); //}
             canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
 
             if(!gameEnded) {
