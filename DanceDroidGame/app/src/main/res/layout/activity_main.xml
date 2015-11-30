@@ -7,33 +7,8 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity"
-                android:background="@color/background">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/credits"
-        android:id="@+id/btnCredits"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/play"
-        android:id="@+id/btnPlay"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings"
-        android:id="@+id/btnSettings"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+                android:background="@color/background"
+                android:tag="phone">
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,10 +16,50 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Dance Droid"
         android:id="@+id/title"
-        android:layout_above="@+id/btnPlay"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="71dp"
+        android:padding="40dp"
+        android:layout_marginBottom="50dp"
         android:textSize="@dimen/abc_text_size_display_2_material"
         android:textColor="@color/text"/>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="4"
+        android:columnCount="1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/title"
+        android:padding="30dp">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/play"
+            android:id="@+id/btnPlay"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:id="@+id/btnSettings"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/credits"
+            android:id="@+id/btnCredits"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exit"
+            android:id="@+id/btnExit"
+            />
+
+    </GridLayout>
+
 
 </RelativeLayout>

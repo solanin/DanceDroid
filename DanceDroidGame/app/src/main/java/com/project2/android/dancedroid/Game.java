@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 
 public class Game extends Activity {
@@ -22,7 +23,7 @@ public class Game extends Activity {
         // The Game View
         gameView = new TDView(this, size.x, size.y);
 
-        setContentView(gameView);
+       setContentView(gameView);
     }
 
     @Override
@@ -30,6 +31,7 @@ public class Game extends Activity {
         // Pause Thread
         super.onPause();
         gameView.pause();
+        SoundManager.getInstance().StopMusic();
     }
 
     @Override
@@ -37,5 +39,6 @@ public class Game extends Activity {
         // Resume Thread
         super.onResume();
         gameView.resume();
+        SoundManager.getInstance().ResumeMusic();
     }
 }

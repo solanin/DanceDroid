@@ -7,9 +7,13 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import java.io.IOException;
 
 public class MainActivity extends Activity {
 
@@ -19,8 +23,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
       //  getSystemService(Context.AUDIO_SERVICE).getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
         // Set up Play Button
-        final Button buttonPlay =
-                (Button)findViewById(R.id.btnPlay);
+
+
+        final ImageButton buttonPlay =
+                (ImageButton)findViewById(R.id.btnPlay);
         buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,8 +37,8 @@ public class MainActivity extends Activity {
             }       });
 
         // Set up Settings Button
-        final Button buttonSettings =
-                (Button)findViewById(R.id.btnSettings);
+        final ImageButton buttonSettings =
+                (ImageButton)findViewById(R.id.btnSettings);
         buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,8 +50,8 @@ public class MainActivity extends Activity {
         });
 
         // Set up Credits Button
-        final Button buttonCredits =
-                (Button)findViewById(R.id.btnCredits);
+        final ImageButton buttonCredits =
+                (ImageButton)findViewById(R.id.btnCredits);
         buttonCredits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,5 +69,6 @@ public class MainActivity extends Activity {
 
         // None yet
         long fastestTime = prefs.getLong("fastestTime", 1000000);
-    }
+    }//onCreate
+
 }

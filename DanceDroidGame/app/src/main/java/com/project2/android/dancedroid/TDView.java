@@ -12,8 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.AudioManager;
-import android.media.SoundPool;
+
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -52,10 +51,6 @@ public class TDView extends SurfaceView implements Runnable{
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
-    //Access SoundManager
-    SoundManager mSoundManager;
-
-
     public TDView(Context context, int x, int y) {
         super(context);
         this.context  = context;
@@ -75,8 +70,8 @@ public class TDView extends SurfaceView implements Runnable{
         // if not available our highscore = 1000000
         fastestTime = prefs.getLong("fastestTime", 1000000);
 
-        mSoundManager = new SoundManager(R.raw.pianotune, context);
-
+       // mSoundManager = new SoundManager(R.raw.pianotune, context);
+        SoundManager.getInstance().SetMusic(R.raw.pianowav, context);
 
         startGame();
     }
@@ -85,7 +80,7 @@ public class TDView extends SurfaceView implements Runnable{
 
         beat1 = new Beat(context, screenX, screenY);
 
-        tapBox = new Rect(0,screenY/2,screenX,(screenY/2)+200);
+        tapBox = new Rect(0,screenY-200,screenX,screenY);
 
         // Reset time and distance
         distanceRemaining = 10000;// 10 km
@@ -120,7 +115,7 @@ public class TDView extends SurfaceView implements Runnable{
 
         // Update the player & enemies
         beat1.update();
-        mSoundManager.PlayMusic(1.0f);
+        SoundManager.getInstance().PlayMusic(1.0f);
         if(!gameEnded) {
             //subtract distance to home planet based on current speed
             distanceRemaining -= 1;
@@ -153,7 +148,7 @@ public class TDView extends SurfaceView implements Runnable{
             */
 
             // Draw Tapbox
-            paint.setColor(Color.argb(90, 255, 255, 255));
+            paint.setColor(Color.argb(255, 255, 255, 255));
             canvas.drawRect(tapBox.left,
                     tapBox.top,
                     tapBox.right,
@@ -161,13 +156,12 @@ public class TDView extends SurfaceView implements Runnable{
                     paint);
 
             // Draw beats
-            //paint.setColor(Color.argb(0, 0, 150, 255));
-            //if (beat1.getTapped()) {
-                canvas.drawRect(beat1.getHitbox().left,
+            paint.setColor(Color.argb(0, 0, 150, 255));
+            if (beat1.getTapped()) { canvas.drawRect(beat1.getHitbox().left,
                     beat1.getHitbox().top,
                     beat1.getHitbox().right,
                     beat1.getHitbox().bottom,
-                    paint); //}
+                    paint); }
             canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
 
             if(!gameEnded) {
