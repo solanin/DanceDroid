@@ -30,7 +30,6 @@ public class TDView extends SurfaceView implements Runnable{
     private int screenX;
     private int screenY;
 
-    private float distanceRemaining;
     private long timeTaken;
     private long timeStarted;
     private long fastestTime;
@@ -67,8 +66,8 @@ public class TDView extends SurfaceView implements Runnable{
         // Initialize the editor ready
         editor = prefs.edit();
         // Load fastest time
-        // if not available our highscore = 1000000
-        fastestTime = prefs.getLong("fastestTime", 1000000);
+        // if not available our highscore = 0
+        fastestTime = prefs.getLong("fastestTime", 0);
 
        // mSoundManager = new SoundManager(R.raw.pianotune, context);
         SoundManager.getInstance().SetMusic(R.raw.pianowav, context);
@@ -83,7 +82,6 @@ public class TDView extends SurfaceView implements Runnable{
         tapBox = new Rect(0,screenY-200,screenX,screenY);
 
         // Reset time and distance
-        distanceRemaining = 10000;// 10 km
         timeTaken = 0;
 
         // Get start time
@@ -110,16 +108,14 @@ public class TDView extends SurfaceView implements Runnable{
         boolean hitDetected = false;
         if(Rect.intersects(tapBox, beat1.getHitbox())){
             hitDetected = true;
-            beat1.tapped();
+            //beat1.tapped();
         }
 
         // Update the player & enemies
         beat1.update();
         SoundManager.getInstance().PlayMusic(1.0f);
-        if(!gameEnded) {
-            //subtract distance to home planet based on current speed
-            distanceRemaining -= 1;
 
+        if(!gameEnded) {
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
         }

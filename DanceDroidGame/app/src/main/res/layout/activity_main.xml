@@ -31,28 +31,28 @@
         android:layout_below="@+id/title"
         android:padding="30dp">
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/play"
             android:id="@+id/btnPlay"
             />
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
             android:id="@+id/btnSettings"
             />
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/credits"
             android:id="@+id/btnCredits"
             />
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exit"
