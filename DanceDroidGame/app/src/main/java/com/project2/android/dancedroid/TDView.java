@@ -31,6 +31,8 @@ public class TDView extends SurfaceView implements Runnable{
     private int screenX;
     private int screenY;
 
+    private int beatsTapped;
+    private static int beatsCombo;
     private long timeTaken;
     private long timeStarted;
     private long fastestTime;
@@ -84,6 +86,8 @@ public class TDView extends SurfaceView implements Runnable{
 
         // Reset time and distance
         timeTaken = 0;
+        beatsTapped = 0;
+        beatsCombo = 0;
 
         // Get start time
         timeStarted = System.currentTimeMillis();
@@ -145,6 +149,16 @@ public class TDView extends SurfaceView implements Runnable{
                     tapbox.bottom,
                     paint);
 
+            //Tap indicator
+            if (beat1.getTapped()) {
+                paint.setColor(Color.argb(255, 0, 0, 150));
+                canvas.drawRect(beat1.getHitbox().left,
+                        beat1.getHitbox().top,
+                        beat1.getHitbox().right,
+                        beat1.getHitbox().bottom,
+                        paint);
+            }
+
             // Draw player & enemies
             canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
 
@@ -152,7 +166,10 @@ public class TDView extends SurfaceView implements Runnable{
                 // Draw the hud
                 paint.setTextAlign(Paint.Align.LEFT);
                 paint.setColor(Color.argb(255, 255, 255, 255));
-                paint.setTextSize(25);
+                paint.setTextSize(40);
+                canvas.drawText("Beats:" + beatsTapped, 10, 40, paint);
+                canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
+                canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
             }else{
                 // Show pause screen
                 paint.setTextSize(80);
@@ -187,6 +204,16 @@ public class TDView extends SurfaceView implements Runnable{
 
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
+                // COLLISION DETECTION
+                if (Rect.intersects(beat1.getHitbox(), tapbox)) {
+                    beat1.tapped();
+                    beatsTapped++;
+                    beatsCombo++;
+                }
+                else {
+                    // break combo
+                    beatsCombo = 0;
+                }
                 break;
         }
         return true;
@@ -217,6 +244,10 @@ public class TDView extends SurfaceView implements Runnable{
         if (thousandths < 10){strThousandths = "0" + strThousandths;}
         String stringTime = "" + seconds + "." + strThousandths;
         return stringTime;
+    }
+
+    public static void breakCombo(){
+        beatsCombo = 0;
     }
 }
 

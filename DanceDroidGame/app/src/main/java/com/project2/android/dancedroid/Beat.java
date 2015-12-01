@@ -91,6 +91,10 @@ public class Beat {
             x = generator.nextInt(maxX) - bitmap.getWidth();
             if (x < bitmap.getWidth()) { x = bitmap.getWidth(); }
             y = 0-bitmap.getHeight();
+
+            //check combo
+            if (!tapped) { TDView.breakCombo(); }
+
             tapped = false;
         }
 
