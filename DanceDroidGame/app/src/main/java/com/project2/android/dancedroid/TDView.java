@@ -12,7 +12,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -30,6 +31,7 @@ public class TDView extends SurfaceView implements Runnable{
     private int screenX;
     private int screenY;
 
+    private float distanceRemaining;
     private long timeTaken;
     private long timeStarted;
     private long fastestTime;
@@ -39,7 +41,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Game Objs
     public Beat beat1;
-    public Rect tapBox;
+    public Rect tapbox;
 
     // Drawing Objs
     private Paint paint;
@@ -49,6 +51,7 @@ public class TDView extends SurfaceView implements Runnable{
     // For saving and loading the high score
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
+
 
     public TDView(Context context, int x, int y) {
         super(context);
@@ -66,22 +69,22 @@ public class TDView extends SurfaceView implements Runnable{
         // Initialize the editor ready
         editor = prefs.edit();
         // Load fastest time
-        // if not available our highscore = 0
+        // if not available our highscore = 1000000
         fastestTime = prefs.getLong("fastestTime", 0);
 
-       // mSoundManager = new SoundManager(R.raw.pianotune, context);
         SoundManager.getInstance().SetMusic(R.raw.pianowav, context);
+
 
         startGame();
     }
 
     private void startGame(){
 
+        tapbox = new Rect(0, screenY-(screenY/4), screenX, (screenY-(screenY/4))+50);
         beat1 = new Beat(context, screenX, screenY);
 
-        tapBox = new Rect(0,screenY-200,screenX,screenY);
-
         // Reset time and distance
+        distanceRemaining = 10000;// 10 km
         timeTaken = 0;
 
         // Get start time
@@ -102,20 +105,16 @@ public class TDView extends SurfaceView implements Runnable{
 
     private void update(){
 
-        // Collision detection on new positions
-        // Before move because we are testing last frames
-        // position which has just been drawn
-        boolean hitDetected = false;
-        if(Rect.intersects(tapBox, beat1.getHitbox())){
-            hitDetected = true;
-            //beat1.tapped();
-        }
-
         // Update the player & enemies
         beat1.update();
+
+        // Play Sound
         SoundManager.getInstance().PlayMusic(1.0f);
 
         if(!gameEnded) {
+            //subtract distance to home planet based on current speed
+            distanceRemaining -= 1;
+
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
         }
@@ -136,28 +135,22 @@ public class TDView extends SurfaceView implements Runnable{
             /*
             // Switch to white pixels
             paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawRect(beat1.getHitbox().left,
-                    beat1.getHitbox().top,
-                    beat1.getHitbox().right,
-                    beat1.getHitbox().bottom,
+            canvas.drawRect(player.getHitbox().left,
+                    player.getHitbox().top,
+                    player.getHitbox().right,
+                    player.getHitbox().bottom,
                     paint);
             */
 
-            // Draw Tapbox
+            // Draw Target
             paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawRect(tapBox.left,
-                    tapBox.top,
-                    tapBox.right,
-                    tapBox.bottom,
+            canvas.drawRect(tapbox.left,
+                    tapbox.top,
+                    tapbox.right,
+                    tapbox.bottom,
                     paint);
 
-            // Draw beats
-            paint.setColor(Color.argb(0, 0, 150, 255));
-            if (beat1.getTapped()) { canvas.drawRect(beat1.getHitbox().left,
-                    beat1.getHitbox().top,
-                    beat1.getHitbox().right,
-                    beat1.getHitbox().bottom,
-                    paint); }
+            // Draw player & enemies
             canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
 
             if(!gameEnded) {
