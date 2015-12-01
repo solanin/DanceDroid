@@ -34,7 +34,9 @@ public class MainActivity extends Activity {
                 Intent i = new Intent(MainActivity.this, Game.class);
                 startActivity(i);
                 finish();
-            }       });
+
+            }
+        });
 
         // Set up Settings Button
         final ImageButton buttonSettings =
@@ -59,6 +61,17 @@ public class MainActivity extends Activity {
                 Intent i = new Intent(MainActivity.this, Credits.class);
                 startActivity(i);
                 finish();
+            }
+        });
+
+        final ImageButton buttonExit =
+                (ImageButton)findViewById(R.id.btnExit);
+        buttonExit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //close app completely
+                finish();
+                System.exit(0);
             }
         });
 

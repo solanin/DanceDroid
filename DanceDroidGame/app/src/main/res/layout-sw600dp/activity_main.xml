@@ -9,18 +9,15 @@
                 tools:context=".MainActivity"
                 android:background="@color/background"
                 >
-
-    <TextView
+    <ImageView
+        android:src="@drawable/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Dance Droid"
         android:id="@+id/title"
         android:layout_centerHorizontal="true"
-        android:padding="100dp"
-        android:layout_marginBottom="71dp"
-        android:textSize="@dimen/abc_text_size_display_2_material"
-        android:textColor="@color/text"/>
+        android:layout_marginBottom="50dp"
+        android:background="@android:color/transparent"/>
+
     <GridLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,6 +32,7 @@
             android:src="@drawable/playbutton"
             android:id="@+id/btnPlay"
             android:padding="40dp"
+            android:background="@android:color/transparent"
             />
 
         <ImageButton
@@ -43,14 +41,16 @@
             android:src="@drawable/optionbutton"
             android:id="@+id/btnSettings"
             android:padding="40dp"
+            android:background="@android:color/transparent"
             />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/creditbutton"
+            android:src="@drawable/credit"
             android:id="@+id/btnCredits"
             android:padding="40dp"
+            android:background="@android:color/transparent"
             />
 
         <ImageButton
@@ -59,6 +59,7 @@
             android:src="@drawable/exitbutton"
             android:id="@+id/btnExit"
             android:padding="40dp"
+            android:background="@android:color/transparent"
             />
 
     </GridLayout>

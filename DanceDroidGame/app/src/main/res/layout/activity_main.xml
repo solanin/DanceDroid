@@ -10,17 +10,13 @@
                 android:background="@color/background"
                 android:tag="phone">
 
-    <TextView
+    <ImageView
+        android:src="@drawable/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Dance Droid"
         android:id="@+id/title"
         android:layout_centerHorizontal="true"
-        android:padding="40dp"
-        android:layout_marginBottom="50dp"
-        android:textSize="@dimen/abc_text_size_display_2_material"
-        android:textColor="@color/text"/>
+        android:background="@android:color/transparent"/>
 
     <GridLayout
         android:layout_width="wrap_content"
@@ -29,34 +25,45 @@
         android:columnCount="1"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/title"
-        android:padding="30dp">
+        android:padding="5dp"
+       >
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/play"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/playphone"
+            android:background="@android:color/transparent"
             android:id="@+id/btnPlay"
             />
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/optionphone"
+            android:background="@android:color/transparent"
             android:id="@+id/btnSettings"
             />
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/credits"
+            android:src="@drawable/creditphone"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
             android:id="@+id/btnCredits"
+            android:padding="5dp"
             />
 
-        <Button
+        <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/exit"
+            android:src="@drawable/exitphone"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
             android:id="@+id/btnExit"
+            android:padding="5dp"
             />
 
     </GridLayout>
