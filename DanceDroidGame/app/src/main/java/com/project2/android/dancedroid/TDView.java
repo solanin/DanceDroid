@@ -42,7 +42,13 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Game Objs
     public Beat beat1;
-    public Rect tapbox;
+    public Rect tapboxPerfect;
+    public Rect tapboxGreat;
+    public Rect tapboxGood;
+    public Rect tapboxBoo;
+
+    public int PERFECT_MULTIPLIER = 10;
+    public int GREAT_MULTIPLIER = 5;
 
     // Drawing Objs
     private Paint paint;
@@ -81,7 +87,13 @@ public class TDView extends SurfaceView implements Runnable{
 
     private void startGame(){
 
-        tapbox = new Rect(0, screenY-(screenY/4), screenX, (screenY-(screenY/4))+50);
+        // Set up accuracy
+        int centerVertical = screenY-(screenY/4);
+        tapboxBoo = new Rect(0, centerVertical-75, screenX, centerVertical+75);
+        tapboxGood = new Rect(0, centerVertical-50, screenX, centerVertical+50);
+        tapboxGreat =  new Rect(0, centerVertical-25, screenX, centerVertical+25);
+        tapboxPerfect =  new Rect(0, centerVertical-5, screenX, centerVertical+5);
+
         beat1 = new Beat(context, screenX, screenY);
 
         // Reset time and distance
@@ -141,13 +153,34 @@ public class TDView extends SurfaceView implements Runnable{
                     paint);
             */
 
-            // Draw Target
-            paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawRect(tapbox.left,
-                    tapbox.top,
-                    tapbox.right,
-                    tapbox.bottom,
+            // Draw Targets
+            paint.setColor(Color.argb(75, 255, 255, 255));
+            canvas.drawRect(tapboxBoo.left,
+                    tapboxBoo.top,
+                    tapboxBoo.right,
+                    tapboxBoo.bottom,
                     paint);
+            paint.setColor(Color.argb(75, 255, 255, 255));
+            canvas.drawRect(tapboxGood.left,
+                    tapboxGood.top,
+                    tapboxGood.right,
+                    tapboxGood.bottom,
+                    paint);
+            paint.setColor(Color.argb(75, 255, 255, 255));
+            canvas.drawRect(tapboxGreat.left,
+                    tapboxGreat.top,
+                    tapboxGreat.right,
+                    tapboxGreat.bottom,
+                    paint);
+            paint.setColor(Color.argb(75, 255, 255, 255));
+            canvas.drawRect(tapboxPerfect.left,
+                    tapboxPerfect.top,
+                    tapboxPerfect.right,
+                    tapboxPerfect.bottom,
+                    paint);
+
+
+
 
             //Tap indicator
             if (beat1.getTapped()) {
@@ -204,11 +237,24 @@ public class TDView extends SurfaceView implements Runnable{
 
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
+
+                int currentMultipler = 1;
+
                 // COLLISION DETECTION
-                if (Rect.intersects(beat1.getHitbox(), tapbox)) {
+                if (Rect.intersects(beat1.getHitbox(), tapboxBoo)) {
                     beat1.tapped();
-                    beatsTapped++;
-                    beatsCombo++;
+                    beatsCombo = 0;
+                    if (Rect.intersects(beat1.getHitbox(), tapboxGood)) {
+                        beatsCombo++;
+                        if (Rect.intersects(beat1.getHitbox(), tapboxGreat)) {
+                            currentMultipler = GREAT_MULTIPLIER;
+                            if (Rect.intersects(beat1.getHitbox(), tapboxPerfect)) {
+                                currentMultipler = PERFECT_MULTIPLIER;
+                            }
+                        }
+
+                        beatsTapped += beatsCombo * currentMultipler;
+                    }
                 }
                 else {
                     // break combo
