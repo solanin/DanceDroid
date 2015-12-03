@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -238,36 +239,58 @@ public class TDView extends SurfaceView implements Runnable{
 
                 int currentMultipler = 1;
                 String text = "hit";
+                int toastColor = Color.WHITE;
 
-                // COLLISION DETECTION
-                if (Rect.intersects(beat1.getHitbox(), tapboxBoo)) {
-                    beat1.tapped();
-                    text = "Boo!";
-                    if (Rect.intersects(beat1.getHitbox(), tapboxGood)) {
-                        beatsCombo++;
-                        text = "Good!";
-                        if (Rect.intersects(beat1.getHitbox(), tapboxGreat)) {
-                            currentMultipler = GREAT_MULTIPLIER;
-                            text = "Great!";
-                            if (Rect.intersects(beat1.getHitbox(), tapboxPerfect)) {
-                                currentMultipler = PERFECT_MULTIPLIER;
-                                text = "Perfect!";
+                // COLLISION
+                if (motionEvent.getX() > beat1.getHitbox().left &&
+                    motionEvent.getX() < beat1.getHitbox().right &&
+                    motionEvent.getY() < beat1.getHitbox().bottom &&
+                    motionEvent.getY() > beat1.getHitbox().top) {
+
+                    if (Rect.intersects(beat1.getHitbox(), tapboxBoo)) {
+                        beat1.tapped();
+                        text = "Boo!";
+                        toastColor = Color.rgb(255, 0, 255);
+                        if (Rect.intersects(beat1.getHitbox(), tapboxGood)) {
+                            beatsCombo++;
+                            text = "Good!";
+                            toastColor = Color.rgb(0, 255, 255);
+                            if (Rect.intersects(beat1.getHitbox(), tapboxGreat)) {
+                                currentMultipler = GREAT_MULTIPLIER;
+                                text = "Great!";
+                                toastColor = Color.rgb(0, 255, 0);
+                                if (Rect.intersects(beat1.getHitbox(), tapboxPerfect)) {
+                                    currentMultipler = PERFECT_MULTIPLIER;
+                                    text = "Perfect!";
+                                    toastColor = Color.rgb(255, 255, 0);
+                                }
                             }
-                        }
 
-                        beatsTapped += beatsCombo * currentMultipler;
+                            beatsTapped += beatsCombo * currentMultipler;
+                        } else {
+                            beatsCombo = 0;
+                        }
                     }
                     else {
+                        // break combo
                         beatsCombo = 0;
+
+                        text = "Miss";
+                        toastColor = Color.rgb(255,0,0);
                     }
                 }
                 else {
                     // break combo
                     beatsCombo = 0;
+
                     text = "Miss";
+                    toastColor = Color.rgb(255,0,0);
                 }
 
                 Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setTextColor(toastColor);
+                toast.getView().setBackgroundColor(Color.TRANSPARENT);
                 toast.show();
                 break;
         }

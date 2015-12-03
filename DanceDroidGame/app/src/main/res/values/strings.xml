@@ -30,4 +30,10 @@
 
     <color name="background">#000000</color>
     <color name="text">#ffffff</color>
+
+    <color name="Perfect">#ffff00</color>
+    <color name="Great">#00ff00</color>
+    <color name="Good">#00ffff</color>
+    <color name="Boo">#ff00ff</color>
+    <color name="Miss">#ff0000</color>
 </resources>
