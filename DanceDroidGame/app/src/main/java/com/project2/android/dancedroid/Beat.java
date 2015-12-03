@@ -74,8 +74,6 @@ public class Beat {
 
         y = 0-bitmap.getHeight();
 
-
-
         // Init the hit box
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
         tapped = false;
@@ -90,6 +88,24 @@ public class Beat {
             speed = 10;
             x = generator.nextInt(maxX) - bitmap.getWidth();
             if (x < bitmap.getWidth()) { x = bitmap.getWidth(); }
+            if (x < bitmap.getWidth()) {
+                x = bitmap.getWidth();
+            }
+            if(x < maxX * .25){
+                x = 0;
+            }
+
+            else if(x < maxX /2){
+                x = maxX / 4;
+            }
+
+            else if(x < maxX * .75 ){
+                x = maxX / 2;
+            }
+
+            else{
+                x = (int) (maxX * .75);
+            }
             y = 0-bitmap.getHeight();
 
             //check combo
