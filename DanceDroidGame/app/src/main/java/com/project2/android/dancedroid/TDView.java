@@ -155,6 +155,14 @@ public class TDView extends SurfaceView implements Runnable{
                     paint);
             */
 
+            // Draw Columns
+            paint.setColor(Color.argb(100, 255, 255, 255));
+            canvas.drawLine(0, 0, 0, screenY, paint);
+            canvas.drawLine(screenX*.25f, 0, screenX*.25f, screenY, paint);
+            canvas.drawLine(screenX*.50f, 0, screenX*.50f, screenY, paint);
+            canvas.drawLine(screenX*.75f, 0, screenX*.75f, screenY, paint);
+            canvas.drawLine(screenX, 0, screenX, screenY, paint);
+
             // Draw Targets
             paint.setColor(Color.argb(75, 255, 255, 255));
             canvas.drawRect(tapboxBoo.left,

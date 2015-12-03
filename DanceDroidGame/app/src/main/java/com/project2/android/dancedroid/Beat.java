@@ -15,13 +15,12 @@ public class Beat {
     private int x, y;
     private int speed = 10;
 
-    // Detect mines leaving the screen
+    // Spawn beats within the screen
     private int maxX;
     private int minX;
-
-    // Spawn mines within screen bounds
     private int maxY;
     private int minY;
+    private int offset;
 
     // A hit box for collision detection
     private Rect hitBox;
@@ -42,35 +41,25 @@ public class Beat {
     // Constructor
     public Beat(Context context, int screenX, int screenY){
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.beat);
+        Random generator = new Random();
+        speed = 10;
+        scaleBitmap(screenX);
 
         maxX = screenX;
         maxY = screenY;
         minX = 0;
         minY = 0;
+        offset = (maxX / 4); // size of 1 column
+        if (offset > bitmap.getWidth()) { // if columns are larger than the image then adjust
+            offset = (offset - bitmap.getWidth()) /2;
+        }
 
-        Random generator = new Random();
-        speed = 10;
-        scaleBitmap(screenX);
-
+        // Columns
         x = generator.nextInt(maxX) - bitmap.getWidth();
-        if (x < bitmap.getWidth()) {
-            x = bitmap.getWidth();
-        }
-        if(x < maxX * .25){
-            x = 0;
-        }
-
-        else if(x < maxX /2){
-            x = maxX / 4;
-        }
-
-        else if(x < maxX * .75 ){
-            x = maxX / 2;
-        }
-
-        else{
-            x = (int) (maxX * .75);
-        }
+        if(x < maxX * .25){ x = offset; }
+        else if(x < maxX * .50){ x = (maxX / 4) + offset; }
+        else if(x < maxX * .75){ x = (maxX / 2) + offset; }
+        else { x = (int) (maxX * .75) + offset; }
 
         y = 0-bitmap.getHeight();
 
@@ -86,26 +75,14 @@ public class Beat {
         if (y < minY - bitmap.getHeight()|| y > maxY + bitmap.getHeight()) {
             Random generator = new Random();
             speed = 10;
+
+            // Columns
             x = generator.nextInt(maxX) - bitmap.getWidth();
-            if (x < bitmap.getWidth()) { x = bitmap.getWidth(); }
-            if (x < bitmap.getWidth()) {
-                x = bitmap.getWidth();
-            }
-            if(x < maxX * .25){
-                x = 0;
-            }
+            if(x < maxX * .25){ x = offset; }
+            else if(x < maxX * .50){ x = (maxX / 4) + offset; }
+            else if(x < maxX * .75){ x = (maxX / 2) + offset; }
+            else { x = (int) (maxX * .75) + offset; }
 
-            else if(x < maxX /2){
-                x = maxX / 4;
-            }
-
-            else if(x < maxX * .75 ){
-                x = maxX / 2;
-            }
-
-            else{
-                x = (int) (maxX * .75);
-            }
             y = 0-bitmap.getHeight();
 
             //check combo
