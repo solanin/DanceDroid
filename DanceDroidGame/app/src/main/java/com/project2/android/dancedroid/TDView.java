@@ -194,6 +194,9 @@ public class TDView extends SurfaceView implements Runnable{
             // Draw player & enemies
             canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
 
+
+
+
             if(!gameEnded) {
                 // Draw the hud
                 paint.setTextAlign(Paint.Align.LEFT);
