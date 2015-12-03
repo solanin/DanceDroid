@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -172,15 +173,12 @@ public class TDView extends SurfaceView implements Runnable{
                     tapboxGreat.right,
                     tapboxGreat.bottom,
                     paint);
-            paint.setColor(Color.argb(75, 255, 255, 255));
+            paint.setColor(Color.argb(255, 255, 255, 255));
             canvas.drawRect(tapboxPerfect.left,
                     tapboxPerfect.top,
                     tapboxPerfect.right,
                     tapboxPerfect.bottom,
                     paint);
-
-
-
 
             //Tap indicator
             if (beat1.getTapped()) {
@@ -200,7 +198,7 @@ public class TDView extends SurfaceView implements Runnable{
                 paint.setTextAlign(Paint.Align.LEFT);
                 paint.setColor(Color.argb(255, 255, 255, 255));
                 paint.setTextSize(40);
-                canvas.drawText("Beats:" + beatsTapped, 10, 40, paint);
+                canvas.drawText("Score:" + beatsTapped, 10, 40, paint);
                 canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
                 canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
             }else{
@@ -239,27 +237,38 @@ public class TDView extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_DOWN:
 
                 int currentMultipler = 1;
+                String text = "hit";
 
                 // COLLISION DETECTION
                 if (Rect.intersects(beat1.getHitbox(), tapboxBoo)) {
                     beat1.tapped();
-                    beatsCombo = 0;
+                    text = "Boo!";
                     if (Rect.intersects(beat1.getHitbox(), tapboxGood)) {
                         beatsCombo++;
+                        text = "Good!";
                         if (Rect.intersects(beat1.getHitbox(), tapboxGreat)) {
                             currentMultipler = GREAT_MULTIPLIER;
+                            text = "Great!";
                             if (Rect.intersects(beat1.getHitbox(), tapboxPerfect)) {
                                 currentMultipler = PERFECT_MULTIPLIER;
+                                text = "Perfect!";
                             }
                         }
 
                         beatsTapped += beatsCombo * currentMultipler;
                     }
+                    else {
+                        beatsCombo = 0;
+                    }
                 }
                 else {
                     // break combo
                     beatsCombo = 0;
+                    text = "Miss";
                 }
+
+                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                toast.show();
                 break;
         }
         return true;
