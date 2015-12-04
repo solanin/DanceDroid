@@ -81,9 +81,7 @@ public class TDView extends SurfaceView implements Runnable{
         // if not available our highscore = 0
         fastestTime = prefs.getLong("fastestTime", 0);
 
-        SoundManager.getInstance().SetMusic(R.raw.pianowav, context);
-
-
+        SoundManager.getInstance().SetMusic(R.raw.pianotune, context);
         startGame();
     }
 
@@ -125,7 +123,7 @@ public class TDView extends SurfaceView implements Runnable{
         beat1.update();
 
         // Play Sound
-        SoundManager.getInstance().PlayMusic(1.0f);
+       // SoundManager.getInstance().PlayMusic(1.0f);
 
         if(!gameEnded) {
             //How long has the player been flying
@@ -201,9 +199,6 @@ public class TDView extends SurfaceView implements Runnable{
 
             // Draw player & enemies
             canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
-
-
-
 
             if(!gameEnded) {
                 // Draw the hud

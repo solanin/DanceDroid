@@ -36,7 +36,8 @@ public class Beat {
 
     // This is used by the TDView update() method to
     // Make an enemy out of bounds and force a re-spawn
-    public void setX(int x) { this.x = x; }
+    public void setX(int x) {
+        this.x = x; }
 
     // Constructor
     public Beat(Context context, int screenX, int screenY){
@@ -49,17 +50,13 @@ public class Beat {
         maxY = screenY;
         minX = 0;
         minY = 0;
-        offset = (maxX / 4); // size of 1 column
-        if (offset > bitmap.getWidth()) { // if columns are larger than the image then adjust
-            offset = (offset - bitmap.getWidth()) /2;
-        }
 
         // Columns
         x = generator.nextInt(maxX) - bitmap.getWidth();
-        if(x < maxX * .25){ x = offset; }
-        else if(x < maxX * .50){ x = (maxX / 4) + offset; }
-        else if(x < maxX * .75){ x = (maxX / 2) + offset; }
-        else { x = (int) (maxX * .75) + offset; }
+        x = setColumn(x);
+
+        speed = 10;
+        scaleBitmap(screenX);
 
         y = 0-bitmap.getHeight();
 
@@ -71,18 +68,20 @@ public class Beat {
     public void update() {
         y += speed;
 
+        //do switch or if cases to change generation speed based on song time
+
         // Respawn
-        if (y < minY - bitmap.getHeight()|| y > maxY + bitmap.getHeight()) {
+        if (y < minY - bitmap.getHeight()|| y > maxY / 2) {
             Random generator = new Random();
             speed = 10;
 
             // Columns
             x = generator.nextInt(maxX) - bitmap.getWidth();
-            if(x < maxX * .25){ x = offset; }
-            else if(x < maxX * .50){ x = (maxX / 4) + offset; }
-            else if(x < maxX * .75){ x = (maxX / 2) + offset; }
-            else { x = (int) (maxX * .75) + offset; }
+            setColumn(x);
 
+            if (x < bitmap.getWidth()) { x = bitmap.getWidth(); }
+
+            x = setColumn(x);
             y = 0-bitmap.getHeight();
 
             //check combo
@@ -110,5 +109,18 @@ public class Beat {
                     bitmap.getHeight() / 2,
                     false);
         }
+    }
+
+    public int setColumn(int x){
+        offset = (maxX / 4); // size of 1 column
+        if (offset > bitmap.getWidth()) { // if columns are larger than the image then adjust
+            offset = (offset - bitmap.getWidth()) /2;
+        }
+
+        if(x < maxX * .25){ x = offset; }
+        else if(x < maxX * .50){ x = (maxX / 4) + offset; }
+        else if(x < maxX * .75){ x = (maxX / 2) + offset; }
+        else { x = (int) (maxX * .75) + offset; }
+        return x;
     }
 }
