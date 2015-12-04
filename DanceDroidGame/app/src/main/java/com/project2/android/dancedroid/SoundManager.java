@@ -3,6 +3,7 @@ package com.project2.android.dancedroid;
 import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.util.Log;
 
@@ -15,34 +16,28 @@ public class SoundManager extends Activity {
     private static final String TAG = "SoundManager";
 
     //TODO - find a way to make sound less buzzy
-    SoundPool sp = new SoundPool(500000000, AudioManager.STREAM_MUSIC, 0);
-    int musicID;
+    MediaPlayer backgrnd1;
     public SoundManager(){
 
     }
 
     public void SetMusic(int id, Context context){
-        musicID = sp.load(context, id, 1);
-        sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener(){
-            public void onLoadComplete(SoundPool soundPool, int sampleId,
-                                       int status) {
-                Log.d(TAG, "music loaded");
-            }
-        });
+        backgrnd1 = MediaPlayer.create(context, id);
     }
 
     public void PlayMusic(float speed){
-        sp.play(musicID, 1, 1, 1, -1, speed);
+        backgrnd1.start();
+        backgrnd1.setLooping(true);
         Log.d(TAG, "Trying to play");
     }
 
     //when app is closed, music changes
     public void StopMusic(){
-        sp.autoPause();
+        backgrnd1.stop();
     }
 
     public void ResumeMusic(){
-        sp.autoResume();
+        backgrnd1.start();
     }
 
     public static SoundManager getInstance()
