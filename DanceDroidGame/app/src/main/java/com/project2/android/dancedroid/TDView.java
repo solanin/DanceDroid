@@ -295,11 +295,14 @@ public class TDView extends SurfaceView implements Runnable{
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
                 int currentMultipler = 1;
-                String text = "hit";
-                int toastColor = Color.WHITE;
+                String text;
+                int toastColor;
                 Integer beatIndex = null;
                 boolean foundBeat = false;
-                // COLLISION//// TODO: 12/7/2015 Make all beat checking into a loop
+
+                // COLLISION
+
+                // Did you tap a beat?
                 for (int i = 0; i < beats.size(); i++){
                     if (motionEvent.getX() > beats.get(i).getHitbox().left &&
                             motionEvent.getX() <  beats.get(i).getHitbox().right &&
@@ -310,16 +313,20 @@ public class TDView extends SurfaceView implements Runnable{
                         break;
                      }
                 }
-                if(foundBeat = false){
+
+                // No? Then you Missed
+                if(!foundBeat){
                     // break combo
                     beatsCombo = 0;
                     beatIndex = null;
                     text = "Miss";
                     toastColor = Color.rgb(255,0,0);
-                    break;
                 }
+
+                // Yes? You tapped a beat
                 else {
                     if (beatIndex != null) {
+                        // How accurate were you?
                         if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxBoo)) {
                             beats.get(beatIndex).tapped();
                             text = "Boo!";
@@ -339,19 +346,24 @@ public class TDView extends SurfaceView implements Runnable{
                                     }
                                 }
 
+                                // "good" "great" or "perfect"
                                 beatsTapped += beatsCombo * currentMultipler;
                             } else {
+                                // "boo"
                                 beatsCombo = 0;
                             }
-                        } else {
+                        }
+                        // You wern't
+                        else {
                             // break combo
                             beatsCombo = 0;
 
+                            // toast
                             text = "Miss";
                             toastColor = Color.rgb(255, 0, 0);
                         }
 
-
+                        // Alert User
                         Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                         TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
                         v.setTextColor(toastColor);
@@ -359,10 +371,9 @@ public class TDView extends SurfaceView implements Runnable{
                         toast.show();
                     }
                 }
-                break;
-        }//switch
+        } // end switch
         return true;
-    }//function
+    } //end function
 
     // Stop thread on quit
     public void pause() {

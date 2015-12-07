@@ -45,6 +45,9 @@ public class Beat {
     public Beat(Context context, int screenX, int screenY){
         //needs to stay for getBitmap()
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.beat);
+        scaleBitmap(screenX);
+
+        // Set up
         Random generator = new Random();
         speed = 10;
         c = context;
@@ -58,10 +61,9 @@ public class Beat {
         // Columns
         x = generator.nextInt(maxX) - bitmap.getWidth();
         x = setColumn(x, c);
-        scaleBitmap(screenX);
-        speed = 10;
-        scaleBitmap(screenX);
+        scaleBitmap(screenX); // We changed the image
 
+        // Spawn Height
         y = 0-bitmap.getHeight();
 
         // Init the hit box
@@ -77,15 +79,10 @@ public class Beat {
         // Respawn
         if (y < minY - bitmap.getHeight()|| y > maxY ) {
             Random generator = new Random();
-            speed = 10;
 
-            // Columns
+            // New Location
             x = generator.nextInt(maxX) - bitmap.getWidth();
             setColumn(x, c);
-
-            if (x < bitmap.getWidth()) { x = bitmap.getWidth(); }
-
-            x = setColumn(x, c);
             y = 0-bitmap.getHeight();
 
             //check combo
