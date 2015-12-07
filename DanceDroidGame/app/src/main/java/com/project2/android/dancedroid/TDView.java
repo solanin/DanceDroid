@@ -28,6 +28,8 @@ import java.util.List;
 public class TDView extends SurfaceView implements Runnable{
 
     private boolean gameEnded;
+    private int MAX_LIVES = 5;
+    public int lives = 0;
 
     private Context context;
 
@@ -100,6 +102,10 @@ public class TDView extends SurfaceView implements Runnable{
 
     private void startGame(){
 
+        // Lives
+        lives = MAX_LIVES;
+        gameEnded = false;
+
         // Set up accuracy
         int centerVertical = screenY-(screenY/4);
         tapboxBoo = new Rect(0, centerVertical-75, screenX, centerVertical+75);
@@ -126,8 +132,6 @@ public class TDView extends SurfaceView implements Runnable{
 
         // Get start time
         timeStarted = System.currentTimeMillis();
-
-        gameEnded = false;
     }
 
     @Override
@@ -153,6 +157,10 @@ public class TDView extends SurfaceView implements Runnable{
         //beat5.update();
         // Play Sound
        // SoundManager.getInstance().PlayMusic(1.0f);
+
+        if (lives <= 0) {
+            gameEnded = true;
+        }
 
         if(!gameEnded) {
             //How long has the player been flying
@@ -258,7 +266,8 @@ public class TDView extends SurfaceView implements Runnable{
                 paint.setColor(Color.argb(255, 255, 255, 255));
                 paint.setTextSize(40);
                 canvas.drawText("Score:" + beatsTapped, 10, 40, paint);
-                canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
+                canvas.drawText("Lives:" + lives, (screenX /2)-100, 40, paint);
+                //canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
                 canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
             }else{
                 // Show pause screen
@@ -321,6 +330,9 @@ public class TDView extends SurfaceView implements Runnable{
                     beatIndex = null;
                     text = "Miss";
                     toastColor = Color.rgb(255,0,0);
+
+                    // LOOSE LIFE
+                    lives--;
                 }
 
                 // Yes? You tapped a beat
@@ -361,6 +373,10 @@ public class TDView extends SurfaceView implements Runnable{
                             // toast
                             text = "Miss";
                             toastColor = Color.rgb(255, 0, 0);
+
+
+                            // LOOSE LIFE
+                            lives--;
                         }
 
                         // Alert User
