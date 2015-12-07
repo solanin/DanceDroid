@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TDView extends SurfaceView implements Runnable{
 
@@ -44,6 +45,18 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Game Objs
     public Beat beat1;
+    public Beat beat2;
+    public Beat beat3;
+    public Beat beat4;
+
+    public Beat beat5;
+    public Beat beat6;
+    public Beat beat7;
+    public Beat beat8;
+
+    ArrayList<Beat> beats = new ArrayList<Beat>();
+    private int NUM_BEATS = 3;
+
     public Rect tapboxPerfect;
     public Rect tapboxGreat;
     public Rect tapboxGood;
@@ -94,8 +107,18 @@ public class TDView extends SurfaceView implements Runnable{
         tapboxGreat =  new Rect(0, centerVertical-25, screenX, centerVertical+25);
         tapboxPerfect =  new Rect(0, centerVertical-5, screenX, centerVertical+5);
 
-        beat1 = new Beat(context, screenX, screenY);
+      /*  beat1 = new Beat(context, screenX, screenY);
+        beat2 = new Beat(context, screenX, screenY);
+        beat3 = new Beat(context, screenX, screenY);
+        beat4 = new Beat(context, screenX, screenY);
+        beat5 = new Beat(context, screenX, screenY);
+        beat6 = new Beat(context, screenX, screenY);
+        beat7 = new Beat(context, screenX, screenY);
+        beat8 = new Beat(context, screenX, screenY);*/
 
+        for (int i = 0; i < NUM_BEATS; i++){
+            beats.add(new Beat(context, screenX, screenY));
+        }
         // Reset time and distance
         timeTaken = 0;
         beatsTapped = 0;
@@ -117,11 +140,17 @@ public class TDView extends SurfaceView implements Runnable{
         }
     }
 
-    private void update(){
-
+    private void update() {
         // Update the player & enemies
-        beat1.update();
+        beats.get(0).update();
+        if(timeTaken > 1200)
+            beats.get(1).update();
+        if(timeTaken > 1800)
+            beats.get(2).update();
 
+        //beat3.update();
+        //beat4.update();
+        //beat5.update();
         // Play Sound
        // SoundManager.getInstance().PlayMusic(1.0f);
 
@@ -186,20 +215,43 @@ public class TDView extends SurfaceView implements Runnable{
                     tapboxPerfect.right,
                     tapboxPerfect.bottom,
                     paint);
-
+            for (int i = 0; i< beats.size(); i++){
+                if (beats.get(i).getTapped()) {
+                    paint.setColor(Color.argb(255, 0, 0, 150));
+                    canvas.drawRect(beats.get(i).getHitbox().left,
+                            beats.get(i).getHitbox().top,
+                            beats.get(i).getHitbox().right,
+                            beats.get(i).getHitbox().bottom,
+                            paint);
+                }
+            }
             //Tap indicator
-            if (beat1.getTapped()) {
+/*
+            if (beat2.getTapped()) {
                 paint.setColor(Color.argb(255, 0, 0, 150));
-                canvas.drawRect(beat1.getHitbox().left,
-                        beat1.getHitbox().top,
-                        beat1.getHitbox().right,
-                        beat1.getHitbox().bottom,
+                canvas.drawRect(beat2.getHitbox().left,
+                        beat2.getHitbox().top,
+                        beat2.getHitbox().right,
+                        beat2.getHitbox().bottom,
                         paint);
             }
 
-            // Draw player & enemies
-            canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
+            if (beat3.getTapped()) {
+                paint.setColor(Color.argb(255, 0, 0, 150));
+                canvas.drawRect(beat3.getHitbox().left,
+                        beat3.getHitbox().top,
+                        beat3.getHitbox().right,
+                        beat3.getHitbox().bottom,
+                        paint);
+            }*/
 
+            // Draw player & enemies
+            for (int i = 0; i < beats.size(); i++){
+                canvas.drawBitmap(beats.get(i).getBitmap(), beats.get(i).getX(), beats.get(i).getY(), paint);
+            }
+           // canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
+         //   canvas.drawBitmap(beat2.getBitmap(), beat2.getX(), beat2.getY(), paint);
+         //   canvas.drawBitmap(beat3.getBitmap(), beat3.getX(), beat3.getY(), paint);
             if(!gameEnded) {
                 // Draw the hud
                 paint.setTextAlign(Paint.Align.LEFT);
@@ -242,39 +294,46 @@ public class TDView extends SurfaceView implements Runnable{
 
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
-
                 int currentMultipler = 1;
                 String text = "hit";
                 int toastColor = Color.WHITE;
+                // COLLISION//// TODO: 12/7/2015 Make all beat checking into a loop
+                for (int i = 0; i < beats.size(); i++){
+                    if (motionEvent.getX() > beats.get(i).getHitbox().left &&
+                            motionEvent.getX() <  beats.get(i).getHitbox().right &&
+                            motionEvent.getY() <  beats.get(i).getHitbox().bottom &&
+                            motionEvent.getY() >  beats.get(i).getHitbox().top) {
 
-                // COLLISION
-                if (motionEvent.getX() > beat1.getHitbox().left &&
-                    motionEvent.getX() < beat1.getHitbox().right &&
-                    motionEvent.getY() < beat1.getHitbox().bottom &&
-                    motionEvent.getY() > beat1.getHitbox().top) {
-
-                    if (Rect.intersects(beat1.getHitbox(), tapboxBoo)) {
-                        beat1.tapped();
-                        text = "Boo!";
-                        toastColor = Color.rgb(255, 0, 255);
-                        if (Rect.intersects(beat1.getHitbox(), tapboxGood)) {
-                            beatsCombo++;
-                            text = "Good!";
-                            toastColor = Color.rgb(0, 255, 255);
-                            if (Rect.intersects(beat1.getHitbox(), tapboxGreat)) {
-                                currentMultipler = GREAT_MULTIPLIER;
-                                text = "Great!";
-                                toastColor = Color.rgb(0, 255, 0);
-                                if (Rect.intersects(beat1.getHitbox(), tapboxPerfect)) {
-                                    currentMultipler = PERFECT_MULTIPLIER;
-                                    text = "Perfect!";
-                                    toastColor = Color.rgb(255, 255, 0);
+                        if (Rect.intersects( beats.get(i).getHitbox(), tapboxBoo)) {
+                            beats.get(i).tapped();
+                            text = "Boo!";
+                            toastColor = Color.rgb(255, 0, 255);
+                            if (Rect.intersects( beats.get(i).getHitbox(), tapboxGood)) {
+                                beatsCombo++;
+                                text = "Good!";
+                                toastColor = Color.rgb(0, 255, 255);
+                                if (Rect.intersects( beats.get(i).getHitbox(), tapboxGreat)) {
+                                    currentMultipler = GREAT_MULTIPLIER;
+                                    text = "Great!";
+                                    toastColor = Color.rgb(0, 255, 0);
+                                    if (Rect.intersects( beats.get(i).getHitbox(), tapboxPerfect)) {
+                                        currentMultipler = PERFECT_MULTIPLIER;
+                                        text = "Perfect!";
+                                        toastColor = Color.rgb(255, 255, 0);
+                                    }
                                 }
-                            }
 
-                            beatsTapped += beatsCombo * currentMultipler;
-                        } else {
+                                beatsTapped += beatsCombo * currentMultipler;
+                            } else {
+                                beatsCombo = 0;
+                            }
+                        }
+                        else {
+                            // break combo
                             beatsCombo = 0;
+
+                            text = "Miss";
+                            toastColor = Color.rgb(255,0,0);
                         }
                     }
                     else {
@@ -284,20 +343,12 @@ public class TDView extends SurfaceView implements Runnable{
                         text = "Miss";
                         toastColor = Color.rgb(255,0,0);
                     }
-                }
-                else {
-                    // break combo
-                    beatsCombo = 0;
-
-                    text = "Miss";
-                    toastColor = Color.rgb(255,0,0);
-                }
-
-                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-                v.setTextColor(toastColor);
-                toast.getView().setBackgroundColor(Color.TRANSPARENT);
-                toast.show();
+                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    v.setTextColor(toastColor);
+                    toast.getView().setBackgroundColor(Color.TRANSPARENT);
+                    toast.show();
+                }//for
                 break;
         }
         return true;

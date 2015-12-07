@@ -11,6 +11,7 @@ import java.util.Random;
  * Created by Jake on 11/14/2015.
  */
 public class Beat {
+
     private Bitmap bitmap;
     private int x, y;
     private int speed = 10;
@@ -22,6 +23,7 @@ public class Beat {
     private int minY;
     private int offset;
 
+    Context c;
     // A hit box for collision detection
     private Rect hitBox;
     private boolean tapped;
@@ -41,10 +43,12 @@ public class Beat {
 
     // Constructor
     public Beat(Context context, int screenX, int screenY){
+        //needs to stay for getBitmap()
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.beat);
         Random generator = new Random();
         speed = 10;
-        scaleBitmap(screenX);
+        c = context;
+
 
         maxX = screenX;
         maxY = screenY;
@@ -53,8 +57,8 @@ public class Beat {
 
         // Columns
         x = generator.nextInt(maxX) - bitmap.getWidth();
-        x = setColumn(x);
-
+        x = setColumn(x, c);
+        scaleBitmap(screenX);
         speed = 10;
         scaleBitmap(screenX);
 
@@ -71,17 +75,17 @@ public class Beat {
         //do switch or if cases to change generation speed based on song time
 
         // Respawn
-        if (y < minY - bitmap.getHeight()|| y > maxY / 2) {
+        if (y < minY - bitmap.getHeight()|| y > maxY ) {
             Random generator = new Random();
             speed = 10;
 
             // Columns
             x = generator.nextInt(maxX) - bitmap.getWidth();
-            setColumn(x);
+            setColumn(x, c);
 
             if (x < bitmap.getWidth()) { x = bitmap.getWidth(); }
 
-            x = setColumn(x);
+            x = setColumn(x, c);
             y = 0-bitmap.getHeight();
 
             //check combo
@@ -111,16 +115,28 @@ public class Beat {
         }
     }
 
-    public int setColumn(int x){
+    public int setColumn(int x, Context context){
         offset = (maxX / 4); // size of 1 column
         if (offset > bitmap.getWidth()) { // if columns are larger than the image then adjust
             offset = (offset - bitmap.getWidth()) /2;
         }
 
-        if(x < maxX * .25){ x = offset; }
-        else if(x < maxX * .50){ x = (maxX / 4) + offset; }
-        else if(x < maxX * .75){ x = (maxX / 2) + offset; }
-        else { x = (int) (maxX * .75) + offset; }
+        if(x < maxX * .25){
+            x = offset;
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
+        }
+        else if(x < maxX * .50){
+            x = (maxX / 4) + offset;
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.doge);
+        }
+        else if(x < maxX * .75){
+            x = (maxX / 2) + offset;
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bear);
+        }
+        else {
+            x = (int) (maxX * .75) + offset;
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bun);
+        }
         return x;
     }
 }

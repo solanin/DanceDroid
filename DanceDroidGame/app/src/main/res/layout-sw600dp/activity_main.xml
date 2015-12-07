@@ -29,7 +29,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/playbutton"
+            android:src="@drawable/play"
             android:id="@+id/btnPlay"
             android:padding="40dp"
             android:background="@android:color/transparent"
@@ -38,7 +38,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/optionbutton"
+            android:src="@drawable/options"
             android:id="@+id/btnSettings"
             android:padding="40dp"
             android:background="@android:color/transparent"
@@ -56,7 +56,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/exitbutton"
+            android:src="@drawable/exit"
             android:id="@+id/btnExit"
             android:padding="40dp"
             android:background="@android:color/transparent"
