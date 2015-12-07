@@ -297,26 +297,42 @@ public class TDView extends SurfaceView implements Runnable{
                 int currentMultipler = 1;
                 String text = "hit";
                 int toastColor = Color.WHITE;
+                Integer beatIndex = null;
+                boolean foundBeat = false;
                 // COLLISION//// TODO: 12/7/2015 Make all beat checking into a loop
                 for (int i = 0; i < beats.size(); i++){
                     if (motionEvent.getX() > beats.get(i).getHitbox().left &&
                             motionEvent.getX() <  beats.get(i).getHitbox().right &&
                             motionEvent.getY() <  beats.get(i).getHitbox().bottom &&
                             motionEvent.getY() >  beats.get(i).getHitbox().top) {
-
-                        if (Rect.intersects( beats.get(i).getHitbox(), tapboxBoo)) {
-                            beats.get(i).tapped();
+                        beatIndex = i;
+                        foundBeat = true;
+                        break;
+                     }
+                }
+                if(foundBeat = false){
+                    // break combo
+                    beatsCombo = 0;
+                    beatIndex = null;
+                    text = "Miss";
+                    toastColor = Color.rgb(255,0,0);
+                    break;
+                }
+                else {
+                    if (beatIndex != null) {
+                        if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxBoo)) {
+                            beats.get(beatIndex).tapped();
                             text = "Boo!";
                             toastColor = Color.rgb(255, 0, 255);
-                            if (Rect.intersects( beats.get(i).getHitbox(), tapboxGood)) {
+                            if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxGood)) {
                                 beatsCombo++;
                                 text = "Good!";
                                 toastColor = Color.rgb(0, 255, 255);
-                                if (Rect.intersects( beats.get(i).getHitbox(), tapboxGreat)) {
+                                if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxGreat)) {
                                     currentMultipler = GREAT_MULTIPLIER;
                                     text = "Great!";
                                     toastColor = Color.rgb(0, 255, 0);
-                                    if (Rect.intersects( beats.get(i).getHitbox(), tapboxPerfect)) {
+                                    if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxPerfect)) {
                                         currentMultipler = PERFECT_MULTIPLIER;
                                         text = "Perfect!";
                                         toastColor = Color.rgb(255, 255, 0);
@@ -327,32 +343,26 @@ public class TDView extends SurfaceView implements Runnable{
                             } else {
                                 beatsCombo = 0;
                             }
-                        }
-                        else {
+                        } else {
                             // break combo
                             beatsCombo = 0;
 
                             text = "Miss";
-                            toastColor = Color.rgb(255,0,0);
+                            toastColor = Color.rgb(255, 0, 0);
                         }
-                    }
-                    else {
-                        // break combo
-                        beatsCombo = 0;
 
-                        text = "Miss";
-                        toastColor = Color.rgb(255,0,0);
+
+                        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                        v.setTextColor(toastColor);
+                        toast.getView().setBackgroundColor(Color.TRANSPARENT);
+                        toast.show();
                     }
-                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-                    v.setTextColor(toastColor);
-                    toast.getView().setBackgroundColor(Color.TRANSPARENT);
-                    toast.show();
-                }//for
+                }
                 break;
-        }
+        }//switch
         return true;
-    }
+    }//function
 
     // Stop thread on quit
     public void pause() {
