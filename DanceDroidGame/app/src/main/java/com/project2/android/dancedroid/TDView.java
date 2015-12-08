@@ -29,7 +29,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     private boolean gameEnded;
     private int MAX_LIVES = 5;
-    public static int lives = 0;
+    public int lives = 0;
 
     private Context context;
 
@@ -37,7 +37,8 @@ public class TDView extends SurfaceView implements Runnable{
     private int screenY;
 
     private int beatsTapped;
-    private static int beatsCombo;
+    private int beatsCombo;
+    private int highestCombo;
     private long timeTaken;
     private long timeStarted;
     private long fastestTime;
@@ -52,9 +53,17 @@ public class TDView extends SurfaceView implements Runnable{
     public Rect tapboxGreat;
     public Rect tapboxGood;
     public Rect tapboxBoo;
+    public int counterPerfect;
+    public int counterGreat;
+    public int counterGood;
+    public int counterBoo;
+    public int counterMiss;
 
+    private int currentMultipler;
     public int PERFECT_MULTIPLIER = 10;
     public int GREAT_MULTIPLIER = 5;
+    public int GOOD_MULTIPLIER = 1;
+    public int BOO_MULTIPLIER = 0;
 
     // Drawing Objs
     private Paint paint;
@@ -101,6 +110,11 @@ public class TDView extends SurfaceView implements Runnable{
         tapboxGood = new Rect(0, centerVertical-50, screenX, centerVertical+50);
         tapboxGreat =  new Rect(0, centerVertical-25, screenX, centerVertical+25);
         tapboxPerfect =  new Rect(0, centerVertical-5, screenX, centerVertical+5);
+        counterPerfect = 0;
+        counterGreat = 0;
+        counterGood = 0;
+        counterBoo = 0;
+        counterMiss = 0;
 
         for (int i = 0; i < NUM_BEATS; i++){
             beats.add(new Beat(context, screenX, screenY));
@@ -109,6 +123,7 @@ public class TDView extends SurfaceView implements Runnable{
         timeTaken = 0;
         beatsTapped = 0;
         beatsCombo = 0;
+        highestCombo = 0;
 
         // Get start time
         timeStarted = System.currentTimeMillis();
@@ -136,6 +151,24 @@ public class TDView extends SurfaceView implements Runnable{
         if(!gameEnded) {
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
+
+            // Check if beats hit bottom untapped
+            for (int i = 0; i < beats.size(); i++) {
+                if (!beats.get(i).getTapped()){
+                    if (beats.get(i).getY() > tapboxBoo.bottom) {
+                        currentMultipler = BOO_MULTIPLIER;
+                        counterMiss++;
+                        beatsCombo = 0;
+
+                        // LOOSE LIFE
+                        lives--;
+
+                        // Tap
+                        beats.get(i).tapped("Miss", Color.rgb(255, 0, 0));
+                    }
+                }
+            }
+
 
             // Update the player & enemies
             beats.get(0).update();
@@ -233,12 +266,37 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("Lives:" + lives, (screenX /2)-100, 40, paint);
                 //canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
                 canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
+
+                paint.setColor(Color.argb(255, 150, 150, 150));
+                canvas.drawText("x" + currentMultipler,10, 90, paint);
+                canvas.drawText("(" + highestCombo + ")", screenX - 200, 90, paint);
+
             }else{
-                // Show pause screen
+                // Show Results screen
+                canvas.drawColor(Color.argb(255, 0, 0, 0));
                 paint.setColor(Color.argb(255, 255, 255, 255));
                 paint.setTextSize(80);
                 paint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText("Game Over", screenX / 2, screenY / 2, paint);
+                canvas.drawText("Game Over", screenX / 2, (screenY / 2) - 430, paint);
+                paint.setTextSize(40);
+                paint.setTextAlign(Paint.Align.LEFT);
+                canvas.drawText("Time: ", (screenX /2)-200, (screenY /2) -350, paint);
+                canvas.drawText("Score: ", (screenX /2)-200, (screenY /2) -300, paint);
+                canvas.drawText("Combo: ", (screenX /2)-200, (screenY /2) -250, paint);
+                canvas.drawText("Perfect: ", (screenX /2)-200, (screenY /2) -200, paint);
+                canvas.drawText("Great: ", (screenX /2)-200, (screenY /2) -150, paint);
+                canvas.drawText("Good: ", (screenX /2)-200, (screenY /2) -100, paint);
+                canvas.drawText("Boo: ", (screenX /2)-200, (screenY /2) -50, paint);
+                canvas.drawText("Miss: ", (screenX /2)-200, (screenY /2), paint);
+                canvas.drawText(formatTime(timeTaken) + " s", (screenX /2)+100, (screenY /2) -350, paint);
+                canvas.drawText(""+beatsTapped, (screenX /2)+100, (screenY /2) -300, paint);
+                canvas.drawText(""+highestCombo, (screenX /2)+100, (screenY /2) -250, paint);
+                canvas.drawText(""+counterPerfect, (screenX /2)+100, (screenY /2) -200, paint);
+                canvas.drawText(""+counterGreat, (screenX /2)+100, (screenY /2) -150, paint);
+                canvas.drawText(""+counterGood, (screenX /2)+100, (screenY /2) -100, paint);
+                canvas.drawText(""+counterBoo, (screenX /2)+100, (screenY /2) -50, paint);
+                canvas.drawText(""+counterMiss, (screenX /2)+100, (screenY /2), paint);
+
             }
             // Unlock & Draw
             ourHolder.unlockCanvasAndPost(canvas);
@@ -267,8 +325,6 @@ public class TDView extends SurfaceView implements Runnable{
 
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
-                int currentMultipler = 1;
-
                 Integer beatIndex = null;
                 boolean foundBeat = false;
 
@@ -288,72 +344,81 @@ public class TDView extends SurfaceView implements Runnable{
                 }// end for
 
 
+                // No, you did not tap a beat
                 if(!foundBeat){
-                    // break combo
-                    beatsCombo = 0;
-                    beatIndex = null;
                     text = "Miss";
-                    toastColor = Color.rgb(255,0,0);
 
-                    // LOOSE LIFE
-                    lives--;
+                    // For now, Do Nothing
                 }
-
-                // Yes? You tapped a beat
+                // Yes, You tapped a beat
                 else {
-                    if (beatIndex != null && !beats.get(beatIndex).getTapped()) {
+                    if (!beats.get(beatIndex).getTapped()) {
                         // How accurate were you?
                         if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxBoo)) {
                             text = "Boo!";
-                            toastColor = Color.rgb(255, 0, 255);
                             if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxGood)) {
-                                beatsCombo++;
                                 text = "Good!";
-                                toastColor = Color.rgb(0, 255, 255);
                                 if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxGreat)) {
-                                    currentMultipler = GREAT_MULTIPLIER;
                                     text = "Great!";
-                                    toastColor = Color.rgb(0, 255, 0);
                                     if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxPerfect)) {
-                                        currentMultipler = PERFECT_MULTIPLIER;
                                         text = "Perfect!";
-                                        toastColor = Color.rgb(255, 255, 0);
                                     }
                                 }
-
-                                // "good" "great" or "perfect"
-                                beatsTapped += beatsCombo * currentMultipler;
-                            } else {
-                                // "boo"
-                                beatsCombo = 0;
                             }
-
-                            beats.get(beatIndex).tapped(text, toastColor);
                         }
-                        // You wern't
+                        // You tapped, but missed the bar
                         else {
-                            // break combo
-                            beatsCombo = 0;
-
-                            // toast
                             text = "Miss";
-                            toastColor = Color.rgb(255, 0, 0);
-
-                            // LOOSE LIFE
-                            lives--;
-
                         }
-                    }//if beatIndex != null
-                }//else
 
-                // Show Miss result
-                if (text == "Miss") {
-                    myToast(text, toastColor);
-                }
+                        switch (text){
+                            case "Miss":
+                                currentMultipler = BOO_MULTIPLIER;
+                                counterMiss++;
+                                toastColor = Color.rgb(255, 0, 0);
+                                beatsCombo = 0;
 
+                                // LOOSE LIFE
+                                lives--;
+
+                                break;
+                            case "Boo!":
+                                currentMultipler = BOO_MULTIPLIER;
+                                counterBoo++;
+                                toastColor = Color.rgb(255, 0, 255);
+                                beatsCombo = 0;
+                                break;
+                            case "Good!":
+                                currentMultipler = GOOD_MULTIPLIER;
+                                counterGood++;
+                                toastColor = Color.rgb(0, 255, 255);
+                                beatsCombo++;
+                                break;
+                            case "Great!":
+                                currentMultipler = GREAT_MULTIPLIER;
+                                counterGreat++;
+                                toastColor = Color.rgb(0, 255, 0);
+                                beatsCombo++;
+                                break;
+                            case "Perfect!":
+                                currentMultipler = PERFECT_MULTIPLIER;
+                                counterPerfect++;
+                                toastColor = Color.rgb(255, 255, 0);
+                                beatsCombo++;
+                                break;
+                        }
+
+                        // Check highest
+                        if (beatsCombo > highestCombo) {
+                            highestCombo = beatsCombo;
+                        }
+
+                        beatsTapped += beatsCombo * currentMultipler;
+                        beats.get(beatIndex).tapped(text, toastColor);
+                    }
+                }// end if beat was tapped
                 break;
         }//switch
-
         return true;
     } //end function
 
@@ -390,16 +455,6 @@ public class TDView extends SurfaceView implements Runnable{
         v.setTextColor(color);
         toast.getView().setBackgroundColor(Color.TRANSPARENT);
         toast.show();
-    }
-
-    //Called when a beat leaves the screen untapped
-    public static void breakCombo(){
-
-        // Reset combo
-        beatsCombo = 0;
-
-        // LOOSE LIFE
-        lives--;
     }
 }
 

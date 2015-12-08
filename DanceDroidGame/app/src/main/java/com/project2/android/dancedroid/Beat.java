@@ -54,7 +54,7 @@ public class Beat {
         this.x = x; }
 
     // Constructor
-    public Beat(Context context, int screenX, int screenY){
+    public Beat (Context context, int screenX, int screenY) {
         //needs to stay for getBitmap()
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.beat);
         scaleBitmap(screenX);
@@ -87,16 +87,13 @@ public class Beat {
         //do switch or if cases to change generation speed based on song time
 
         // Respawn
-        if (y < minY - bitmap.getHeight()|| y > maxY ) {
+        if ( y < minY - bitmap.getHeight() || y > maxY ) {
             Random generator = new Random();
 
             // New Location
             x = generator.nextInt(maxX) - bitmap.getWidth();
             x = setColumn(x, c);
             y = 0-bitmap.getHeight();
-
-            //check combo
-            if (!tapped) { TDView.breakCombo(); }
 
             tapped = false;
         }
@@ -109,12 +106,12 @@ public class Beat {
     }
 
     public void scaleBitmap(int x){
-        if(x < 1000) {
+        if (x < 1000) {
             bitmap = Bitmap.createScaledBitmap(bitmap,
                     bitmap.getWidth() / 3,
                     bitmap.getHeight() / 3,
                     false);
-        }else if(x < 1200){
+        } else if (x < 1200) {
             bitmap = Bitmap.createScaledBitmap(bitmap,
                     bitmap.getWidth() / 2,
                     bitmap.getHeight() / 2,
