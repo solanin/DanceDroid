@@ -6,36 +6,35 @@ package com.project2.android.dancedroid;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TDView extends SurfaceView implements Runnable{
 
+    // Game
+    volatile boolean playing;
+    Thread gameThread = null;
+    private Context context;
+
+    // Game over Controls
     private boolean gameEnded;
     private int MAX_LIVES = 5;
     public int lives = 0;
 
-    private Context context;
-
+    // Screen
     private int screenX;
     private int screenY;
 
+    // Score
     private int beatsTapped;
     private int beatsCombo;
     private int highestCombo;
@@ -43,12 +42,11 @@ public class TDView extends SurfaceView implements Runnable{
     private long timeStarted;
     private long fastestTime;
 
-    volatile boolean playing;
-    Thread gameThread = null;
-
+    // Beats
     ArrayList<Beat> beats = new ArrayList<Beat>();
     private int NUM_BEATS = 7;
 
+    // Accuracy
     public Rect tapboxPerfect;
     public Rect tapboxGreat;
     public Rect tapboxGood;
@@ -59,7 +57,8 @@ public class TDView extends SurfaceView implements Runnable{
     public int counterBoo;
     public int counterMiss;
 
-    private int currentMultipler;
+    // Score
+    private int currentMultiplier;
     public int PERFECT_MULTIPLIER = 10;
     public int GREAT_MULTIPLIER = 5;
     public int GOOD_MULTIPLIER = 1;
@@ -156,7 +155,7 @@ public class TDView extends SurfaceView implements Runnable{
             for (int i = 0; i < beats.size(); i++) {
                 if (!beats.get(i).getTapped()){
                     if (beats.get(i).getY() > tapboxBoo.bottom) {
-                        currentMultipler = BOO_MULTIPLIER;
+                        currentMultiplier = BOO_MULTIPLIER;
                         counterMiss++;
                         beatsCombo = 0;
 
@@ -268,7 +267,7 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
 
                 paint.setColor(Color.argb(255, 150, 150, 150));
-                canvas.drawText("x" + currentMultipler,10, 90, paint);
+                canvas.drawText("x" + currentMultiplier,10, 90, paint);
                 canvas.drawText("(" + highestCombo + ")", screenX - 200, 90, paint);
 
             }else{
@@ -373,7 +372,7 @@ public class TDView extends SurfaceView implements Runnable{
 
                         switch (text){
                             case "Miss":
-                                currentMultipler = BOO_MULTIPLIER;
+                                currentMultiplier = BOO_MULTIPLIER;
                                 counterMiss++;
                                 toastColor = Color.rgb(255, 0, 0);
                                 beatsCombo = 0;
@@ -383,25 +382,25 @@ public class TDView extends SurfaceView implements Runnable{
 
                                 break;
                             case "Boo!":
-                                currentMultipler = BOO_MULTIPLIER;
+                                currentMultiplier = BOO_MULTIPLIER;
                                 counterBoo++;
                                 toastColor = Color.rgb(255, 0, 255);
                                 beatsCombo = 0;
                                 break;
                             case "Good!":
-                                currentMultipler = GOOD_MULTIPLIER;
+                                currentMultiplier = GOOD_MULTIPLIER;
                                 counterGood++;
                                 toastColor = Color.rgb(0, 255, 255);
                                 beatsCombo++;
                                 break;
                             case "Great!":
-                                currentMultipler = GREAT_MULTIPLIER;
+                                currentMultiplier = GREAT_MULTIPLIER;
                                 counterGreat++;
                                 toastColor = Color.rgb(0, 255, 0);
                                 beatsCombo++;
                                 break;
                             case "Perfect!":
-                                currentMultipler = PERFECT_MULTIPLIER;
+                                currentMultiplier = PERFECT_MULTIPLIER;
                                 counterPerfect++;
                                 toastColor = Color.rgb(255, 255, 0);
                                 beatsCombo++;
@@ -413,7 +412,7 @@ public class TDView extends SurfaceView implements Runnable{
                             highestCombo = beatsCombo;
                         }
 
-                        beatsTapped += beatsCombo * currentMultipler;
+                        beatsTapped += beatsCombo * currentMultiplier;
                         beats.get(beatIndex).tapped(text, toastColor);
                     }
                 }// end if beat was tapped
