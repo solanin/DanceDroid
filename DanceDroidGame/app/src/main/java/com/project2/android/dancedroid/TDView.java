@@ -126,37 +126,6 @@ public class TDView extends SurfaceView implements Runnable{
 
     private void update() {
 
-<<<<<<< HEAD
-        if(timeTaken > 2000 && timeTaken % 2000 == 0){
-            for(int i = 0; i < beats.size(); i++){
-                beats.get(i).setSpeed( beats.get(i).getSpeed() + 2);
-            }
-        }
-
-
-        // Update the player & enemies
-        beats.get(0).update();
-        if(timeTaken > 500)
-            beats.get(1).update();
-        if(timeTaken > 1150)
-            beats.get(2).update();
-        if(timeTaken > 1800)
-            beats.get(3).update();
-        if(timeTaken > 2450)
-            beats.get(4).update();
-        if(timeTaken > 3100)
-            beats.get(5).update();
-        if(timeTaken > 3750)
-            beats.get(6).update();
-        if(timeTaken > 4400)
-            beats.get(7).update();
-        if(timeTaken > 5050)
-            beats.get(8).update();
-=======
-        // Play Sound
-       // SoundManager.getInstance().PlayMusic(1.0f);
->>>>>>> 2d3d92c8f352eccf8be79c16cf86ec54036bb269
-
         if (lives <= 0) {
             gameEnded = true;
         }
@@ -165,20 +134,31 @@ public class TDView extends SurfaceView implements Runnable{
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
 
+            if(timeTaken > 2000 && timeTaken % 2000 == 0){
+                for(int i = 0; i < beats.size(); i++){
+                    beats.get(i).setSpeed( beats.get(i).getSpeed() + 2);
+                }
+            }
+
             // Update the player & enemies
             beats.get(0).update();
-            if(timeTaken > 1200)
+            if(timeTaken > 500)
                 beats.get(1).update();
-            if(timeTaken > 1800)
+            if(timeTaken > 1200)
                 beats.get(2).update();
-            if(timeTaken > 2400)
+            if(timeTaken > 1900)
                 beats.get(3).update();
-            if(timeTaken > 3300)
+            if(timeTaken > 2600)
                 beats.get(4).update();
-            if(timeTaken > 4000)
+            if(timeTaken > 3300)
                 beats.get(5).update();
-            if(timeTaken > 4700)
+            if(timeTaken > 4000)
                 beats.get(6).update();
+            if(timeTaken > 4700)
+                beats.get(7).update();
+            if(timeTaken > 5400)
+                beats.get(8).update();
+
         }
     }
 

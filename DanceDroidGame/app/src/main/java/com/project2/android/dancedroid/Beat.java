@@ -59,7 +59,7 @@ public class Beat {
         result = text;
         color = toastColor;
     }
-    
+
     // This is used by the TDView update() method to
     // Make an enemy out of bounds and force a re-spawn
     public void setX(int x) {
@@ -147,7 +147,8 @@ public class Beat {
                 bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.doge);
                 dogCounter++;
                 catCounter = 0;
-            }else{
+            }
+            else{
                 x = offset;
                 bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
                 catCounter++;
@@ -208,7 +209,6 @@ public class Beat {
                 dogCounter = 0;
                 bearCounter = 0;
             }
-
         }
 
         scaleBitmap(maxX); // We changed the image
