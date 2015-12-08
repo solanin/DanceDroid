@@ -28,6 +28,8 @@ import java.util.List;
 public class TDView extends SurfaceView implements Runnable{
 
     private boolean gameEnded;
+    private int MAX_LIVES = 5;
+    public int lives = 0;
 
     private Context context;
 
@@ -44,7 +46,7 @@ public class TDView extends SurfaceView implements Runnable{
     Thread gameThread = null;
 
     ArrayList<Beat> beats = new ArrayList<Beat>();
-    private int NUM_BEATS = 5;
+    private int NUM_BEATS = 7;
 
     public Rect tapboxPerfect;
     public Rect tapboxGreat;
@@ -89,6 +91,10 @@ public class TDView extends SurfaceView implements Runnable{
 
     private void startGame(){
 
+        // Lives
+        lives = MAX_LIVES;
+        gameEnded = false;
+
         // Set up accuracy
         int centerVertical = screenY-(screenY/4);
         tapboxBoo = new Rect(0, centerVertical-75, screenX, centerVertical+75);
@@ -106,8 +112,6 @@ public class TDView extends SurfaceView implements Runnable{
 
         // Get start time
         timeStarted = System.currentTimeMillis();
-
-        gameEnded = false;
     }
 
     @Override
@@ -125,13 +129,20 @@ public class TDView extends SurfaceView implements Runnable{
         beats.get(0).update();
         if(timeTaken > 1000)
             beats.get(1).update();
-        if(timeTaken > 1400)
+        if(timeTaken > 1700)
             beats.get(2).update();
-        if(timeTaken > 1800)
+        if(timeTaken > 2400)
             beats.get(3).update();
-        if(timeTaken > 2200)
+        if(timeTaken > 3300)
             beats.get(4).update();
+        if(timeTaken > 4000)
+            beats.get(5).update();
+        if(timeTaken > 4700)
+            beats.get(6).update();
 
+        if (lives <= 0) {
+            gameEnded = true;
+        }
 
         if(!gameEnded) {
             //How long has the player been flying
@@ -204,7 +215,8 @@ public class TDView extends SurfaceView implements Runnable{
                 paint.setColor(Color.argb(255, 255, 255, 255));
                 paint.setTextSize(40);
                 canvas.drawText("Score:" + beatsTapped, 10, 40, paint);
-                canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
+                canvas.drawText("Lives:" + lives, (screenX /2)-100, 40, paint);
+                //canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
                 canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
             }else{
                 // Show pause screen
@@ -229,7 +241,8 @@ public class TDView extends SurfaceView implements Runnable{
     // SurfaceView allows us to handle the onTouchEvent
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-
+        String text = "default";
+        int toastColor = Color.DKGRAY;
         // There are many different events in MotionEvent
         // We care about just 2 - for now.
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
@@ -240,11 +253,13 @@ public class TDView extends SurfaceView implements Runnable{
             // Has the player touched the screen?
             case MotionEvent.ACTION_DOWN:
                 int currentMultipler = 1;
-                String text = "hit";
-                int toastColor = Color.WHITE;
+
                 Integer beatIndex = null;
                 boolean foundBeat = false;
-                // COLLISION//// TODO: 12/7/2015 Make all beat checking into a loop
+
+                // COLLISION
+
+                // Did you tap a beat?
                 for (int i = 0; i < beats.size(); i++){
                     if (motionEvent.getX() > beats.get(i).getHitbox().left &&
                             motionEvent.getX() <  beats.get(i).getHitbox().right &&
@@ -254,16 +269,30 @@ public class TDView extends SurfaceView implements Runnable{
                         foundBeat = true;
                         break;
                      }
+
                 }//for
+
+
                 if(!foundBeat){
                     // break combo
                     beatsCombo = 0;
                     beatIndex = null;
                     text = "Miss";
                     toastColor = Color.rgb(255,0,0);
+
+                    // LOOSE LIFE
+                    lives--;
+                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                    v.setTextColor(toastColor);
+                    toast.getView().setBackgroundColor(Color.TRANSPARENT);
+                    toast.show();
                 }
+
+                // Yes? You tapped a beat
                 else {
                     if (beatIndex != null) {
+                        // How accurate were you?
                         if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxBoo)) {
                             beats.get(beatIndex).tapped();
                             text = "Boo!";
@@ -283,16 +312,22 @@ public class TDView extends SurfaceView implements Runnable{
                                     }
                                 }
 
+                                // "good" "great" or "perfect"
                                 beatsTapped += beatsCombo * currentMultipler;
                             } else {
+                                // "boo"
                                 beatsCombo = 0;
                             }
-                        } else {
+                        }
+                        // You wern't
+                        else {
                             // break combo
                             beatsCombo = 0;
 
+                            // toast
                             text = "Miss";
                             toastColor = Color.rgb(255, 0, 0);
+
                         }
                     }//if beatIndex != null
                 }//else
@@ -303,8 +338,10 @@ public class TDView extends SurfaceView implements Runnable{
                 toast.show();
                 break;
         }//switch
+            // LOOSE LIFE
+        //lives--;
         return true;
-    }//function
+    } //end function
 
     // Stop thread on quit
     public void pause() {
