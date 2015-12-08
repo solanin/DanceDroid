@@ -13,6 +13,9 @@ import java.util.Random;
 public class Beat {
 
     private Bitmap bitmap;
+    private String result;
+    private int color;
+
     private int x, y;
     private int speed = 10;
 
@@ -32,9 +35,18 @@ public class Beat {
     public Bitmap getBitmap(){ return bitmap; }
     public int getX() { return x; }
     public int getY() { return y; }
+    public String getResult(){ return result; }
+    public int getColor(){ return color; }
     public Rect getHitbox(){ return hitBox; }
     public boolean getTapped(){ return tapped; }
-    public void tapped(){ tapped = true; }
+
+
+    // Tapp
+    public void tapped(String text, int toastColor){
+        tapped = true;
+        result = text;
+        color = toastColor;
+    }
 
     // This is used by the TDView update() method to
     // Make an enemy out of bounds and force a re-spawn
