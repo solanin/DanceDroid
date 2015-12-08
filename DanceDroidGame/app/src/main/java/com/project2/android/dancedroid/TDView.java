@@ -29,7 +29,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     private boolean gameEnded;
     private int MAX_LIVES = 5;
-    public int lives = 0;
+    public static int lives = 0;
 
     private Context context;
 
@@ -126,6 +126,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     private void update() {
 
+<<<<<<< HEAD
         if(timeTaken > 2000 && timeTaken % 2000 == 0){
             for(int i = 0; i < beats.size(); i++){
                 beats.get(i).setSpeed( beats.get(i).getSpeed() + 2);
@@ -151,6 +152,10 @@ public class TDView extends SurfaceView implements Runnable{
             beats.get(7).update();
         if(timeTaken > 5050)
             beats.get(8).update();
+=======
+        // Play Sound
+       // SoundManager.getInstance().PlayMusic(1.0f);
+>>>>>>> 2d3d92c8f352eccf8be79c16cf86ec54036bb269
 
         if (lives <= 0) {
             gameEnded = true;
@@ -159,6 +164,21 @@ public class TDView extends SurfaceView implements Runnable{
         if(!gameEnded) {
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
+
+            // Update the player & enemies
+            beats.get(0).update();
+            if(timeTaken > 1200)
+                beats.get(1).update();
+            if(timeTaken > 1800)
+                beats.get(2).update();
+            if(timeTaken > 2400)
+                beats.get(3).update();
+            if(timeTaken > 3300)
+                beats.get(4).update();
+            if(timeTaken > 4000)
+                beats.get(5).update();
+            if(timeTaken > 4700)
+                beats.get(6).update();
         }
     }
 
@@ -175,9 +195,9 @@ public class TDView extends SurfaceView implements Runnable{
             // Draw Columns
             paint.setColor(Color.argb(100, 255, 255, 255));
             canvas.drawLine(0, 0, 0, screenY, paint);
-            canvas.drawLine(screenX*.25f, 0, screenX*.25f, screenY, paint);
-            canvas.drawLine(screenX*.50f, 0, screenX*.50f, screenY, paint);
-            canvas.drawLine(screenX*.75f, 0, screenX*.75f, screenY, paint);
+            canvas.drawLine(screenX * .25f, 0, screenX*.25f, screenY, paint);
+            canvas.drawLine(screenX * .50f, 0, screenX * .50f, screenY, paint);
+            canvas.drawLine(screenX * .75f, 0, screenX * .75f, screenY, paint);
             canvas.drawLine(screenX, 0, screenX, screenY, paint);
 
             // Draw Targets
@@ -205,7 +225,11 @@ public class TDView extends SurfaceView implements Runnable{
                     tapboxPerfect.right,
                     tapboxPerfect.bottom,
                     paint);
-            for (int i = 0; i< beats.size(); i++){
+
+            // Draw player & enemies
+            for (int i = 0; i < beats.size(); i++){
+
+                // Blue BG
                 if (beats.get(i).getTapped()) {
                     paint.setColor(Color.argb(255, 0, 0, 150));
                     canvas.drawRect(beats.get(i).getHitbox().left,
@@ -214,11 +238,18 @@ public class TDView extends SurfaceView implements Runnable{
                             beats.get(i).getHitbox().bottom,
                             paint);
                 }
-            }
 
-            // Draw player & enemies
-            for (int i = 0; i < beats.size(); i++){
                 canvas.drawBitmap(beats.get(i).getBitmap(), beats.get(i).getX(), beats.get(i).getY(), paint);
+
+                // if Clicked show result
+                if (beats.get(i).getTapped()) {
+                    paint.setTextAlign(Paint.Align.CENTER);
+                    paint.setColor(beats.get(i).getColor());
+                    paint.setTextSize(40);
+                    canvas.drawText(beats.get(i).getResult(), beats.get(i).getX() +
+                            (beats.get(i).getBitmap().getWidth()/2), beats.get(i).getY() +
+                            beats.get(i).getBitmap().getHeight() + 40, paint);
+                }
             }
 
             if(!gameEnded) {
@@ -232,10 +263,10 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
             }else{
                 // Show pause screen
+                paint.setColor(Color.argb(255, 255, 255, 255));
                 paint.setTextSize(80);
                 paint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText("Game Over", screenX / 2, 100, paint);
-                paint.setTextSize(25);
+                canvas.drawText("Game Over", screenX / 2, screenY / 2, paint);
             }
             // Unlock & Draw
             ourHolder.unlockCanvasAndPost(canvas);
@@ -282,7 +313,7 @@ public class TDView extends SurfaceView implements Runnable{
                         break;
                      }
 
-                }//for
+                }// end for
 
 
                 if(!foundBeat){
@@ -294,19 +325,13 @@ public class TDView extends SurfaceView implements Runnable{
 
                     // LOOSE LIFE
                     lives--;
-                    Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                    TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-                    v.setTextColor(toastColor);
-                    toast.getView().setBackgroundColor(Color.TRANSPARENT);
-                    toast.show();
                 }
 
                 // Yes? You tapped a beat
                 else {
-                    if (beatIndex != null) {
+                    if (beatIndex != null && !beats.get(beatIndex).getTapped()) {
                         // How accurate were you?
                         if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxBoo)) {
-                            beats.get(beatIndex).tapped();
                             text = "Boo!";
                             toastColor = Color.rgb(255, 0, 255);
                             if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxGood)) {
@@ -330,6 +355,8 @@ public class TDView extends SurfaceView implements Runnable{
                                 // "boo"
                                 beatsCombo = 0;
                             }
+
+                            beats.get(beatIndex).tapped(text, toastColor);
                         }
                         // You wern't
                         else {
@@ -340,18 +367,21 @@ public class TDView extends SurfaceView implements Runnable{
                             text = "Miss";
                             toastColor = Color.rgb(255, 0, 0);
 
+                            // LOOSE LIFE
+                            lives--;
+
                         }
                     }//if beatIndex != null
                 }//else
-                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-                v.setTextColor(toastColor);
-                toast.getView().setBackgroundColor(Color.TRANSPARENT);
-                toast.show();
+
+                // Show Miss result
+                if (text == "Miss") {
+                    myToast(text, toastColor);
+                }
+
                 break;
         }//switch
-            // LOOSE LIFE
-        //lives--;
+
         return true;
     } //end function
 
@@ -382,8 +412,22 @@ public class TDView extends SurfaceView implements Runnable{
         return stringTime;
     }
 
+    public void myToast(String text, int color) {
+        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        v.setTextColor(color);
+        toast.getView().setBackgroundColor(Color.TRANSPARENT);
+        toast.show();
+    }
+
+    //Called when a beat leaves the screen untapped
     public static void breakCombo(){
+
+        // Reset combo
         beatsCombo = 0;
+
+        // LOOSE LIFE
+        lives--;
     }
 }
 
