@@ -43,19 +43,8 @@ public class TDView extends SurfaceView implements Runnable{
     volatile boolean playing;
     Thread gameThread = null;
 
-    // Game Objs
-    public Beat beat1;
-    public Beat beat2;
-    public Beat beat3;
-    public Beat beat4;
-
-    public Beat beat5;
-    public Beat beat6;
-    public Beat beat7;
-    public Beat beat8;
-
     ArrayList<Beat> beats = new ArrayList<Beat>();
-    private int NUM_BEATS = 3;
+    private int NUM_BEATS = 5;
 
     public Rect tapboxPerfect;
     public Rect tapboxGreat;
@@ -107,15 +96,6 @@ public class TDView extends SurfaceView implements Runnable{
         tapboxGreat =  new Rect(0, centerVertical-25, screenX, centerVertical+25);
         tapboxPerfect =  new Rect(0, centerVertical-5, screenX, centerVertical+5);
 
-      /*  beat1 = new Beat(context, screenX, screenY);
-        beat2 = new Beat(context, screenX, screenY);
-        beat3 = new Beat(context, screenX, screenY);
-        beat4 = new Beat(context, screenX, screenY);
-        beat5 = new Beat(context, screenX, screenY);
-        beat6 = new Beat(context, screenX, screenY);
-        beat7 = new Beat(context, screenX, screenY);
-        beat8 = new Beat(context, screenX, screenY);*/
-
         for (int i = 0; i < NUM_BEATS; i++){
             beats.add(new Beat(context, screenX, screenY));
         }
@@ -143,16 +123,15 @@ public class TDView extends SurfaceView implements Runnable{
     private void update() {
         // Update the player & enemies
         beats.get(0).update();
-        if(timeTaken > 1200)
+        if(timeTaken > 1000)
             beats.get(1).update();
-        if(timeTaken > 1800)
+        if(timeTaken > 1400)
             beats.get(2).update();
+        if(timeTaken > 1800)
+            beats.get(3).update();
+        if(timeTaken > 2200)
+            beats.get(4).update();
 
-        //beat3.update();
-        //beat4.update();
-        //beat5.update();
-        // Play Sound
-       // SoundManager.getInstance().PlayMusic(1.0f);
 
         if(!gameEnded) {
             //How long has the player been flying
@@ -169,18 +148,6 @@ public class TDView extends SurfaceView implements Runnable{
 
             // Clear last frame
             canvas.drawColor(Color.argb(255, 0, 0, 0));
-
-            // DEBUGGING
-            // Draw Hit boxes
-            /*
-            // Switch to white pixels
-            paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawRect(player.getHitbox().left,
-                    player.getHitbox().top,
-                    player.getHitbox().right,
-                    player.getHitbox().bottom,
-                    paint);
-            */
 
             // Draw Columns
             paint.setColor(Color.argb(100, 255, 255, 255));
@@ -225,33 +192,12 @@ public class TDView extends SurfaceView implements Runnable{
                             paint);
                 }
             }
-            //Tap indicator
-/*
-            if (beat2.getTapped()) {
-                paint.setColor(Color.argb(255, 0, 0, 150));
-                canvas.drawRect(beat2.getHitbox().left,
-                        beat2.getHitbox().top,
-                        beat2.getHitbox().right,
-                        beat2.getHitbox().bottom,
-                        paint);
-            }
-
-            if (beat3.getTapped()) {
-                paint.setColor(Color.argb(255, 0, 0, 150));
-                canvas.drawRect(beat3.getHitbox().left,
-                        beat3.getHitbox().top,
-                        beat3.getHitbox().right,
-                        beat3.getHitbox().bottom,
-                        paint);
-            }*/
 
             // Draw player & enemies
             for (int i = 0; i < beats.size(); i++){
                 canvas.drawBitmap(beats.get(i).getBitmap(), beats.get(i).getX(), beats.get(i).getY(), paint);
             }
-           // canvas.drawBitmap(beat1.getBitmap(), beat1.getX(), beat1.getY(), paint);
-         //   canvas.drawBitmap(beat2.getBitmap(), beat2.getX(), beat2.getY(), paint);
-         //   canvas.drawBitmap(beat3.getBitmap(), beat3.getX(), beat3.getY(), paint);
+
             if(!gameEnded) {
                 // Draw the hud
                 paint.setTextAlign(Paint.Align.LEFT);
@@ -267,7 +213,6 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("Game Over", screenX / 2, 100, paint);
                 paint.setTextSize(25);
             }
-
             // Unlock & Draw
             ourHolder.unlockCanvasAndPost(canvas);
         }
@@ -309,14 +254,13 @@ public class TDView extends SurfaceView implements Runnable{
                         foundBeat = true;
                         break;
                      }
-                }
-                if(foundBeat = false){
+                }//for
+                if(!foundBeat){
                     // break combo
                     beatsCombo = 0;
                     beatIndex = null;
                     text = "Miss";
                     toastColor = Color.rgb(255,0,0);
-                    break;
                 }
                 else {
                     if (beatIndex != null) {
@@ -350,15 +294,13 @@ public class TDView extends SurfaceView implements Runnable{
                             text = "Miss";
                             toastColor = Color.rgb(255, 0, 0);
                         }
-
-
-                        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-                        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-                        v.setTextColor(toastColor);
-                        toast.getView().setBackgroundColor(Color.TRANSPARENT);
-                        toast.show();
-                    }
-                }
+                    }//if beatIndex != null
+                }//else
+                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setTextColor(toastColor);
+                toast.getView().setBackgroundColor(Color.TRANSPARENT);
+                toast.show();
                 break;
         }//switch
         return true;
