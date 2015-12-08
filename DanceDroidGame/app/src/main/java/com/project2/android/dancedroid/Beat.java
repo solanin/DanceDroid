@@ -52,7 +52,6 @@ public class Beat {
         speed = 10;
         c = context;
 
-
         maxX = screenX;
         maxY = screenY;
         minX = 0;
@@ -61,7 +60,6 @@ public class Beat {
         // Columns
         x = generator.nextInt(maxX) - bitmap.getWidth();
         x = setColumn(x, c);
-        scaleBitmap(screenX); // We changed the image
 
         // Spawn Height
         y = 0-bitmap.getHeight();
@@ -82,7 +80,7 @@ public class Beat {
 
             // New Location
             x = generator.nextInt(maxX) - bitmap.getWidth();
-            setColumn(x, c);
+            x = setColumn(x, c);
             y = 0-bitmap.getHeight();
 
             //check combo
@@ -134,6 +132,9 @@ public class Beat {
             x = (int) (maxX * .75) + offset;
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bun);
         }
+
+        scaleBitmap(maxX); // We changed the image
+
         return x;
     }
 }

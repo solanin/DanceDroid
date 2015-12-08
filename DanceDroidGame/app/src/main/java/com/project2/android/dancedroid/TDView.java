@@ -29,7 +29,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     private boolean gameEnded;
     private int MAX_LIVES = 5;
-    public int lives = 0;
+    public static int lives = 0;
 
     private Context context;
 
@@ -145,16 +145,7 @@ public class TDView extends SurfaceView implements Runnable{
     }
 
     private void update() {
-        // Update the player & enemies
-        beats.get(0).update();
-        if(timeTaken > 1200)
-            beats.get(1).update();
-        if(timeTaken > 1800)
-            beats.get(2).update();
 
-        //beat3.update();
-        //beat4.update();
-        //beat5.update();
         // Play Sound
        // SoundManager.getInstance().PlayMusic(1.0f);
 
@@ -165,6 +156,13 @@ public class TDView extends SurfaceView implements Runnable{
         if(!gameEnded) {
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
+
+            // Update the player & enemies
+            beats.get(0).update();
+            if(timeTaken > 1200)
+                beats.get(1).update();
+            if(timeTaken > 1800)
+                beats.get(2).update();
         }
     }
 
@@ -418,8 +416,14 @@ public class TDView extends SurfaceView implements Runnable{
         return stringTime;
     }
 
+    //Called when a beat leaves the screen untapped
     public static void breakCombo(){
+
+        // Reset combo
         beatsCombo = 0;
+
+        // LOOSE LIFE
+        lives--;
     }
 }
 
