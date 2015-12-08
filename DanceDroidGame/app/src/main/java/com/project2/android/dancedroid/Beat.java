@@ -77,7 +77,7 @@ public class Beat {
         y = 0-bitmap.getHeight();
 
         // Init the hit box
-        hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        hitBox = new Rect(x-offset, y, bitmap.getWidth()+offset, bitmap.getHeight());
         tapped = false;
     }
 
@@ -102,9 +102,9 @@ public class Beat {
         }
 
         // Refresh
-        hitBox.left = x;
+        hitBox.left = x - offset;
         hitBox.top = y;
-        hitBox.right = x + bitmap.getWidth();
+        hitBox.right = x + bitmap.getWidth() + offset;
         hitBox.bottom = y + bitmap.getHeight();
     }
 
