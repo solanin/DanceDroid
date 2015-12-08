@@ -23,6 +23,11 @@ public class Beat {
     private int minY;
     private int offset;
 
+    private int catCounter = 0;
+    private int dogCounter = 0;
+    private int bearCounter = 0;
+    private int bunCounter = 0;
+
     Context c;
     // A hit box for collision detection
     private Rect hitBox;
@@ -34,7 +39,15 @@ public class Beat {
     public int getY() { return y; }
     public Rect getHitbox(){ return hitBox; }
     public boolean getTapped(){ return tapped; }
+
+    public void setSpeed(int value){
+        speed = value;
+    }
+    public int getSpeed(){
+        return speed;
+    }
     public void tapped(){ tapped = true; }
+
 
     // This is used by the TDView update() method to
     // Make an enemy out of bounds and force a re-spawn
@@ -72,6 +85,7 @@ public class Beat {
     }
 
     public void update() {
+
         y += speed;
 
         //do switch or if cases to change generation speed based on song time
@@ -119,20 +133,73 @@ public class Beat {
         }
 
         if(x < maxX * .25){
-            x = offset;
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
+            if(catCounter >= 3){
+                x = (maxX / 4) + offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.doge);
+                dogCounter++;
+                catCounter = 0;
+            }else{
+                x = offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
+                catCounter++;
+
+                dogCounter = 0;
+                bunCounter = 0;
+                bearCounter = 0;
+            }
+
         }
         else if(x < maxX * .50){
-            x = (maxX / 4) + offset;
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.doge);
+            if(dogCounter >=3){
+                x = (maxX / 2) + offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bear);
+                bearCounter++;
+                dogCounter = 0;
+            }
+            else{
+                x = (maxX / 4) + offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.doge);
+                dogCounter++;
+
+                catCounter = 0;
+                bunCounter = 0;
+                bearCounter = 0;
+            }
         }
         else if(x < maxX * .75){
-            x = (maxX / 2) + offset;
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bear);
+            if(bearCounter >= 3){
+                x = (int) (maxX * .75) + offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bun);
+                bunCounter++;
+                bearCounter = 0;
+            }
+            else{
+                x = (maxX / 2) + offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bear);
+                bearCounter++;
+
+                catCounter = 0;
+                dogCounter = 0;
+                bunCounter = 0;
+            }
         }
         else {
-            x = (int) (maxX * .75) + offset;
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bun);
+            if(bunCounter >=3){
+                x = offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
+                catCounter++;
+                bunCounter = 0;
+            }
+            else{
+                x = (int) (maxX * .75) + offset;
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bun);
+                bunCounter++;
+
+                catCounter = 0;
+                dogCounter = 0;
+                bearCounter = 0;
+            }
+
         }
         return x;
     }
