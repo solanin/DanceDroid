@@ -192,8 +192,6 @@ public class TDView extends SurfaceView implements Runnable{
                         lives--;
                         beats.get(i).tapped("Miss", Color.RED);
                     }
-
-
                 }
             }
         }

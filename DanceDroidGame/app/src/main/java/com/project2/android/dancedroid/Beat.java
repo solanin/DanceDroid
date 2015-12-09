@@ -26,10 +26,10 @@ public class Beat {
     private int minY;
     private int offset;
 
-    private int catCounter = 0;
-    private int dogCounter = 0;
-    private int bearCounter = 0;
-    private int bunCounter = 0;
+    private static int catCounter = 0;
+    private static int dogCounter = 0;
+    private static int bearCounter = 0;
+    private static int bunCounter = 0;
 
     Context c;
     // A hit box for collision detection
@@ -191,7 +191,7 @@ public class Beat {
             }
         }
         else {
-            if(bunCounter >=3){
+            if(bunCounter >= 3){
                 x = offset;
                 bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cat);
                 catCounter++;
@@ -207,9 +207,7 @@ public class Beat {
                 bearCounter = 0;
             }
         }
-
         scaleBitmap(maxX); // We changed the image
-
         return x;
     }
 }
