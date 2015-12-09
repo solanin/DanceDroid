@@ -25,6 +25,10 @@ public class TDView extends SurfaceView implements Runnable{
     Thread gameThread = null;
     private Context context;
 
+    // Replay
+    private int REPLAY_COUNTER = 100;
+    private int replayCounter;
+
     // Game over Controls
     private boolean gameEnded;
     private int MAX_LIVES = 5;
@@ -111,6 +115,7 @@ public class TDView extends SurfaceView implements Runnable{
         // Lives
         lives = MAX_LIVES;
         gameEnded = false;
+        replayCounter = 0;
 
         // Set up accuracy
         counterPerfect = 0;
@@ -196,6 +201,8 @@ public class TDView extends SurfaceView implements Runnable{
 
                 }
             }
+        } else {
+            replayCounter++;
         }
     }
 
@@ -307,12 +314,14 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText(""+counterGreat, (screenX /2)+100, (screenY /2) -150, paint);
                 canvas.drawText(""+counterGood, (screenX /2)+100, (screenY /2) -100, paint);
                 canvas.drawText(""+counterBoo, (screenX /2)+100, (screenY /2) -50, paint);
-                canvas.drawText(""+counterMiss, (screenX /2)+100, (screenY /2), paint);
+                canvas.drawText("" + counterMiss, (screenX / 2) + 100, (screenY / 2), paint);
 
 
-                paint.setTextSize(60);
-                paint.setTextAlign(Paint.Align.CENTER);
-                canvas.drawText("Tap to Replay", screenX / 2, (screenY / 2) + 100, paint);
+                if (replayCounter > REPLAY_COUNTER) {
+                    paint.setTextSize(60);
+                    paint.setTextAlign(Paint.Align.CENTER);
+                    canvas.drawText("Tap to Replay", screenX / 2, (screenY / 2) + 200, paint);
+                }
             }
             // Unlock & Draw
             ourHolder.unlockCanvasAndPost(canvas);
@@ -343,7 +352,9 @@ public class TDView extends SurfaceView implements Runnable{
             case MotionEvent.ACTION_DOWN:
 
                 if (gameEnded) {
-                    startGame();
+                    if (replayCounter > REPLAY_COUNTER) {
+                        startGame();
+                    }
                 }
                 else {
 
