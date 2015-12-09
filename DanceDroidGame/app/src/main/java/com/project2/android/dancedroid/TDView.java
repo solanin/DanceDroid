@@ -163,21 +163,23 @@ public class TDView extends SurfaceView implements Runnable{
             }
 
             // Update the player & enemies
-            beats.get(0).update();
-            if(timeTaken > 650)
-                beats.get(1).update();
-            if(timeTaken > 1300)
-                beats.get(2).update();
-            if(timeTaken > 1950)
-                beats.get(3).update();
-            if(timeTaken > 2600)
-                beats.get(4).update();
-            if(timeTaken > 3250)
-                beats.get(5).update();
-            if(timeTaken > 3900)
-                beats.get(6).update();
-            if(timeTaken > 4550)
-                beats.get(7).update();
+            if(beats.size() == NUM_BEATS) {
+                beats.get(0).update();
+                if (timeTaken > 650)
+                    beats.get(1).update();
+                if (timeTaken > 1300)
+                    beats.get(2).update();
+                if (timeTaken > 1950)
+                    beats.get(3).update();
+                if (timeTaken > 2600)
+                    beats.get(4).update();
+                if (timeTaken > 3250)
+                    beats.get(5).update();
+                if (timeTaken > 3900)
+                    beats.get(6).update();
+                if (timeTaken > 4550)
+                    beats.get(7).update();
+            }
 ;
 
             for (int i = 0; i < beats.size(); i++){
