@@ -44,7 +44,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Beats
     ArrayList<Beat> beats = new ArrayList<Beat>();
-    private int NUM_BEATS = 9;
+    private int NUM_BEATS = 8;
 
     // Accuracy
     public Rect tapboxPerfect;
@@ -155,6 +155,7 @@ public class TDView extends SurfaceView implements Runnable{
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
 
+
             if(timeTaken > 2000 && timeTaken % 2000 == 0){
                 for(int i = 0; i < beats.size(); i++){
                     beats.get(i).setSpeed( beats.get(i).getSpeed() + 2);
@@ -163,55 +164,35 @@ public class TDView extends SurfaceView implements Runnable{
 
             // Update the player & enemies
             beats.get(0).update();
-            if(timeTaken > 500)
+            if(timeTaken > 650)
                 beats.get(1).update();
-            if(timeTaken > 1200)
+            if(timeTaken > 1300)
                 beats.get(2).update();
-            if(timeTaken > 1900)
+            if(timeTaken > 1950)
                 beats.get(3).update();
             if(timeTaken > 2600)
                 beats.get(4).update();
-            if(timeTaken > 3300)
+            if(timeTaken > 3250)
                 beats.get(5).update();
-            if(timeTaken > 4000)
+            if(timeTaken > 3900)
                 beats.get(6).update();
-            if(timeTaken > 4700)
+            if(timeTaken > 4550)
                 beats.get(7).update();
-            if(timeTaken > 5400)
-                beats.get(8).update();
+;
 
-            // Check if beats hit bottom untapped
-            for (int i = 0; i < beats.size(); i++) {
-                if (!beats.get(i).getTapped()){
-                    if (beats.get(i).getY() > tapboxBoo.bottom) {
+            for (int i = 0; i < beats.size(); i++){
+                if(!beats.get(i).getTapped()){
+                    if(beats.get(i).getY() > tapboxBoo.bottom){
                         currentMultiplier = BOO_MULTIPLIER;
                         counterMiss++;
                         beatsCombo = 0;
 
-                        // LOOSE LIFE
                         lives--;
-
-                        // Tap
-                        beats.get(i).tapped("Miss", Color.rgb(255, 0, 0));
+                        beats.get(i).tapped("Miss", Color.RED);
                     }
-                }
-            }
 
-            if (beats.size() == NUM_BEATS) {
-                // Update the player & enemies
-                beats.get(0).update();
-                if (timeTaken > 1200)
-                    beats.get(1).update();
-                if (timeTaken > 1800)
-                    beats.get(2).update();
-                if (timeTaken > 2400)
-                    beats.get(3).update();
-                if (timeTaken > 3300)
-                    beats.get(4).update();
-                if (timeTaken > 4000)
-                    beats.get(5).update();
-                if (timeTaken > 4700)
-                    beats.get(6).update();
+
+                }
             }
         }
     }
