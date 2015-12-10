@@ -26,7 +26,7 @@ public class TDView extends SurfaceView implements Runnable{
     private Context context;
 
     // Replay
-    private int REPLAY_COUNTER = 100;
+    private final int REPLAY_COUNTER = 100;
     private int replayCounter;
 
     // Game over Controls
@@ -40,6 +40,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Score
     private int beatsTapped;
+    private int currentMultiplier;
     private int beatsCombo;
     private int highestCombo;
     private long timeTaken;
@@ -48,7 +49,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Beats
     ArrayList<Beat> beats = new ArrayList<Beat>();
-    private int NUM_BEATS = 8;
+    private final int NUM_BEATS = 8;
 
     // Accuracy
     public Rect tapboxPerfect;
@@ -61,12 +62,16 @@ public class TDView extends SurfaceView implements Runnable{
     public int counterBoo;
     public int counterMiss;
 
-    // Score
-    private int currentMultiplier;
-    public int PERFECT_MULTIPLIER = 10;
-    public int GREAT_MULTIPLIER = 5;
-    public int GOOD_MULTIPLIER = 1;
-    public int BOO_MULTIPLIER = 0;
+    // Constants
+    private final int PERFECT_MULTIPLIER = 10;
+    private final int GREAT_MULTIPLIER = 5;
+    private final int GOOD_MULTIPLIER = 1;
+    private final int BOO_MULTIPLIER = 0;
+    private final String PERFECT = "Perfect!";
+    private final String GREAT = "Great!";
+    private final String GOOD = "Good!";
+    private final String BOO = "Boo!";
+    private final String MISS = "Miss";
 
     // Drawing Objs
     private Paint paint;
@@ -377,35 +382,29 @@ public class TDView extends SurfaceView implements Runnable{
                     }// end for
 
 
-                    // No, you did not tap a beat
-                    if (!foundBeat) {
-                        text = "Miss";
-
-                        // For now, Do Nothing
-                    }
-                    // Yes, You tapped a beat
-                    else {
+                    // Yes, you did tap a beat
+                    if (foundBeat) {
                         if (!beats.get(beatIndex).getTapped()) {
                             // How accurate were you?
                             if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxBoo)) {
-                                text = "Boo!";
+                                text = BOO;
                                 if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxGood)) {
-                                    text = "Good!";
+                                    text = GOOD;
                                     if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxGreat)) {
-                                        text = "Great!";
+                                        text = GREAT;
                                         if (Rect.intersects(beats.get(beatIndex).getHitbox(), tapboxPerfect)) {
-                                            text = "Perfect!";
+                                            text = PERFECT;
                                         }
                                     }
                                 }
                             }
                             // You tapped, but missed the bar
                             else {
-                                text = "Miss";
+                                text = MISS;
                             }
 
                             switch (text) {
-                                case "Miss":
+                                case MISS:
                                     currentMultiplier = BOO_MULTIPLIER;
                                     counterMiss++;
                                     toastColor = Color.rgb(255, 0, 0);
@@ -415,25 +414,25 @@ public class TDView extends SurfaceView implements Runnable{
                                     lives--;
 
                                     break;
-                                case "Boo!":
+                                case BOO:
                                     currentMultiplier = BOO_MULTIPLIER;
                                     counterBoo++;
                                     toastColor = Color.rgb(255, 0, 255);
                                     beatsCombo = 0;
                                     break;
-                                case "Good!":
+                                case GOOD:
                                     currentMultiplier = GOOD_MULTIPLIER;
                                     counterGood++;
                                     toastColor = Color.rgb(0, 255, 255);
                                     beatsCombo++;
                                     break;
-                                case "Great!":
+                                case GREAT:
                                     currentMultiplier = GREAT_MULTIPLIER;
                                     counterGreat++;
                                     toastColor = Color.rgb(0, 255, 0);
                                     beatsCombo++;
                                     break;
-                                case "Perfect!":
+                                case PERFECT:
                                     currentMultiplier = PERFECT_MULTIPLIER;
                                     counterPerfect++;
                                     toastColor = Color.rgb(255, 255, 0);
