@@ -17,7 +17,7 @@ public class Beat {
     private int color;
 
     private int x, y;
-    private int speed = 10;
+    private int speed = 16;
 
     // Spawn beats within the screen
     private int maxX;

@@ -45,10 +45,11 @@ public class TDView extends SurfaceView implements Runnable{
     private long timeTaken;
     private long timeStarted;
     private long fastestTime;
+    private int spawnTime = 700;
 
     // Beats
     ArrayList<Beat> beats = new ArrayList<Beat>();
-    private int NUM_BEATS = 8;
+    private int NUM_BEATS = 9;
 
     // Accuracy
     public Rect tapboxPerfect;
@@ -159,33 +160,36 @@ public class TDView extends SurfaceView implements Runnable{
         if(!gameEnded) {
             //How long has the player been flying
             timeTaken = System.currentTimeMillis() - timeStarted;
-
-
-            if(timeTaken > 2000 && timeTaken % 2000 == 0){
+            
+            if(timeTaken > 3000 && timeTaken % 2000 == 0){
                 for(int i = 0; i < beats.size(); i++){
-                    beats.get(i).setSpeed( beats.get(i).getSpeed() + 2);
+                    beats.get(i).setSpeed( beats.get(i).getSpeed() + 4);
                 }
             }
+
+
 
             // Update the player & enemies
             if(beats.size() == NUM_BEATS) {
                 beats.get(0).update();
-                if (timeTaken > 650)
+                if (timeTaken > 600)
                     beats.get(1).update();
-                if (timeTaken > 1300)
+                if (timeTaken > 1200)
                     beats.get(2).update();
-                if (timeTaken > 1950)
+                if (timeTaken > 1800)
                     beats.get(3).update();
-                if (timeTaken > 2600)
+                if (timeTaken > 2400)
                     beats.get(4).update();
-                if (timeTaken > 3250)
+                if (timeTaken > 3000)
                     beats.get(5).update();
-                if (timeTaken > 3900)
+                if (timeTaken > 3600)
                     beats.get(6).update();
-                if (timeTaken > 4550)
+                if (timeTaken > 4200)
                     beats.get(7).update();
+                if(timeTaken > 4800){
+                    beats.get(8).update();
+                }
             }
-;
 
             for (int i = 0; i < beats.size(); i++){
                 if(!beats.get(i).getTapped()){
@@ -253,7 +257,22 @@ public class TDView extends SurfaceView implements Runnable{
 
                 // Blue BG
                 if (beats.get(i).getTapped()) {
-                    paint.setColor(Color.argb(255, 0, 0, 150));
+                    if(beats.get(i).getResult() == "Perfect!") {
+                        paint.setColor(Color.argb(255, 0, 255, 0));
+                    }
+                    else if(beats.get(i).getResult() == "Great!") {
+                        paint.setColor(Color.argb( 255, 173, 255, 47));
+                    }
+                    else if(beats.get(i).getResult() == "Good!") {
+                        paint.setColor(Color.argb(255, 0, 255, 255));
+                    }
+                    else if(beats.get(i).getResult() == "Boo!") {
+                        paint.setColor(Color.argb(255, 255, 0, 255));
+                    }
+                    else if(beats.get(i).getResult() == "Miss") {
+                        paint.setColor(Color.argb(255, 255, 0,0));
+                    }
+
                     canvas.drawRect(beats.get(i).getHitbox().left,
                             beats.get(i).getHitbox().top,
                             beats.get(i).getHitbox().right,
@@ -428,13 +447,13 @@ public class TDView extends SurfaceView implements Runnable{
                                 case "Great!":
                                     currentMultiplier = GREAT_MULTIPLIER;
                                     counterGreat++;
-                                    toastColor = Color.rgb(0, 255, 0);
+                                    toastColor = Color.rgb(173, 255, 47);
                                     beatsCombo++;
                                     break;
                                 case "Perfect!":
                                     currentMultiplier = PERFECT_MULTIPLIER;
                                     counterPerfect++;
-                                    toastColor = Color.rgb(255, 255, 0);
+                                    toastColor = Color.rgb(0, 255, 0);
                                     beatsCombo++;
                                     break;
                             }
@@ -454,6 +473,7 @@ public class TDView extends SurfaceView implements Runnable{
         return true;
     } //end function
 
+    // Stop thread on quit
     // Stop thread on quit
     public void pause() {
         playing = false;
