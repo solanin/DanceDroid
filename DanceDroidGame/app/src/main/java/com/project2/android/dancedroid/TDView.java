@@ -50,11 +50,8 @@ public class TDView extends SurfaceView implements Runnable{
 
     // Beats
     ArrayList<Beat> beats = new ArrayList<Beat>();
-<<<<<<< HEAD
-    private int NUM_BEATS = 9;
-=======
-    private final int NUM_BEATS = 8;
->>>>>>> dcb4d6b135af2f413b0369ff3431d9bf35e07cf2
+    private final int NUM_BEATS = 9;
+
 
     // Accuracy
     public Rect tapboxPerfect;
