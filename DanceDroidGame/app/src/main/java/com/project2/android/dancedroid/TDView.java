@@ -281,7 +281,7 @@ public class TDView extends SurfaceView implements Runnable{
                 }
             }
 
-            if(!gameEnded) {
+            if (!gameEnded) {
                 // Draw the hud
                 paint.setTextAlign(Paint.Align.LEFT);
                 paint.setColor(Color.argb(255, 255, 255, 255));
@@ -295,7 +295,7 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("x" + currentMultiplier,10, 90, paint);
                 canvas.drawText("(" + highestCombo + ")", screenX - 200, 90, paint);
 
-            }else{
+            } else{
                 // Show Results screen
                 canvas.drawColor(Color.argb(255, 0, 0, 0));
                 paint.setColor(Color.argb(255, 255, 255, 255));
