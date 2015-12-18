@@ -39,14 +39,13 @@ public class TDView extends SurfaceView implements Runnable{
     private int screenY;
 
     // Score
-    private int beatsTapped;
+    private long score;
     private int currentMultiplier;
     private int beatsCombo;
     private int highestCombo;
     private long timeTaken;
     private long timeStarted;
-    private long fastestTime;
-    private int spawnTime = 700;
+    private long highScore;
 
     // Beats
     ArrayList<Beat> beats = new ArrayList<Beat>();
@@ -107,9 +106,10 @@ public class TDView extends SurfaceView implements Runnable{
         prefs = context.getSharedPreferences("HiScores", context.MODE_PRIVATE);
         // Initialize the editor ready
         editor = prefs.edit();
+
         // Load fastest time
         // if not available our highscore = 0
-        fastestTime = prefs.getLong("fastestTime", 0);
+        highScore = prefs.getLong("highScore", 0);
 
         startGame();
     }
@@ -139,7 +139,7 @@ public class TDView extends SurfaceView implements Runnable{
 
         // Reset time and distance
         timeTaken = 0;
-        beatsTapped = 0;
+        score = 0;
         beatsCombo = 0;
         highestCombo = 0;
 
@@ -161,6 +161,14 @@ public class TDView extends SurfaceView implements Runnable{
 
         if (lives <= 0) {
             gameEnded = true;
+
+            //check for new fastest time
+            if(score < highScore) {
+                // Save high score
+                editor.putLong("highScore", score);
+                editor.commit();
+                highScore = score;
+            }
         }
 
         if(!gameEnded) {
@@ -308,16 +316,16 @@ public class TDView extends SurfaceView implements Runnable{
                 paint.setTextAlign(Paint.Align.LEFT);
                 paint.setColor(Color.argb(255, 255, 255, 255));
                 paint.setTextSize(40);
-                canvas.drawText("Score:" + beatsTapped, 10, 40, paint);
+                canvas.drawText("Score:" + score, 10, 40, paint);
                 canvas.drawText("Lives:" + lives, (screenX /2)-100, 40, paint);
                 //canvas.drawText("Time:" + formatTime(timeTaken), (screenX /2)-100, 40, paint);
                 canvas.drawText("Combo:" + beatsCombo, screenX - 200, 40, paint);
 
                 paint.setColor(Color.argb(255, 150, 150, 150));
-                canvas.drawText("x" + currentMultiplier,10, 90, paint);
+                canvas.drawText("x" + currentMultiplier, 10, 90, paint);
                 canvas.drawText("(" + highestCombo + ")", screenX - 200, 90, paint);
 
-            } else{
+            } else {
                 // Show Results screen
                 canvas.drawColor(Color.argb(255, 0, 0, 0));
                 paint.setColor(Color.argb(255, 255, 255, 255));
@@ -326,7 +334,7 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("Game Over", screenX / 2, (screenY / 2) - 430, paint);
                 paint.setTextSize(40);
                 paint.setTextAlign(Paint.Align.LEFT);
-                canvas.drawText("Time: ", (screenX /2)-200, (screenY /2) -350, paint);
+                canvas.drawText("Time: ", (screenX / 2) - 200, (screenY / 2) - 350, paint);
                 canvas.drawText("Score: ", (screenX / 2) - 200, (screenY / 2) - 300, paint);
                 canvas.drawText("Combo: ", (screenX / 2) - 200, (screenY / 2) - 250, paint);
                 canvas.drawText("Perfect: ", (screenX /2)-200, (screenY /2) -200, paint);
@@ -335,13 +343,17 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("Boo: ", (screenX /2)-200, (screenY /2) -50, paint);
                 canvas.drawText("Miss: ", (screenX /2)-200, (screenY /2), paint);
                 canvas.drawText(formatTime(timeTaken) + " s", (screenX /2)+100, (screenY /2) -350, paint);
-                canvas.drawText(""+beatsTapped, (screenX /2)+100, (screenY /2) -300, paint);
+                canvas.drawText(""+ score, (screenX /2)+100, (screenY /2) -300, paint);
                 canvas.drawText(""+highestCombo, (screenX /2)+100, (screenY /2) -250, paint);
                 canvas.drawText(""+counterPerfect, (screenX /2)+100, (screenY /2) -200, paint);
                 canvas.drawText(""+counterGreat, (screenX /2)+100, (screenY /2) -150, paint);
                 canvas.drawText(""+counterGood, (screenX /2)+100, (screenY /2) -100, paint);
                 canvas.drawText(""+counterBoo, (screenX /2)+100, (screenY /2) -50, paint);
                 canvas.drawText("" + counterMiss, (screenX / 2) + 100, (screenY / 2), paint);
+
+                // High Score
+                canvas.drawText("High Score: ", (screenX / 2) - 200, (screenY / 2) + 100, paint);
+                canvas.drawText("" + highScore, (screenX / 2) + 100, (screenY / 2) + 100, paint);
 
 
                 if (replayCounter > REPLAY_COUNTER) {
@@ -469,8 +481,7 @@ public class TDView extends SurfaceView implements Runnable{
                             if (beatsCombo > highestCombo) {
                                 highestCombo = beatsCombo;
                             }
-
-                            beatsTapped += beatsCombo * currentMultiplier;
+                            score += beatsCombo * currentMultiplier;
 
                             beats.get(beatIndex).tapped(text, toastColor);
                         }
