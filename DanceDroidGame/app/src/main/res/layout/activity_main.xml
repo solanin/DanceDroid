@@ -37,14 +37,6 @@
             android:id="@+id/btnPlay"
             />
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/optionphone"
-            android:background="@android:color/transparent"
-            android:id="@+id/btnSettings"
-            />
 
         <ImageButton
             android:layout_width="wrap_content"

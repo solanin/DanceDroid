@@ -265,6 +265,7 @@ public class TDView extends SurfaceView implements Runnable{
                 if (beats.get(i).getTapped()) {
                     if(beats.get(i).getResult() == "Perfect!") {
                         paint.setColor(Color.argb(255, 0, 255, 0));
+
                     }
                     else if(beats.get(i).getResult() == "Great!") {
                         paint.setColor(Color.argb( 255, 173, 255, 47));
@@ -278,8 +279,11 @@ public class TDView extends SurfaceView implements Runnable{
                     else if(beats.get(i).getResult() == "Miss") {
                         paint.setColor(Color.argb(255, 255, 0,0));
                     }
+                    if(beats.get(i).getResult() != "Miss"){
 
-                    canvas.drawRect(beats.get(i).getHitbox().left,
+                    }
+
+                        canvas.drawRect(beats.get(i).getHitbox().left,
                             beats.get(i).getHitbox().top,
                             beats.get(i).getHitbox().right,
                             beats.get(i).getHitbox().bottom,
@@ -443,18 +447,21 @@ public class TDView extends SurfaceView implements Runnable{
                                     counterGood++;
                                     toastColor = Color.rgb(0, 255, 255);
                                     beatsCombo++;
+                                    SoundManager.getInstance().Beep();
                                     break;
                                 case GREAT:
                                     currentMultiplier = GREAT_MULTIPLIER;
                                     counterGreat++;
                                     toastColor = Color.rgb(173, 255, 47);
                                     beatsCombo++;
+                                    SoundManager.getInstance().Beep();
                                     break;
                                 case PERFECT:
                                     currentMultiplier = PERFECT_MULTIPLIER;
                                     counterPerfect++;
                                     toastColor = Color.rgb(0, 255, 0);
                                     beatsCombo++;
+                                    SoundManager.getInstance().Beep();
                                     break;
                             }
 
@@ -464,6 +471,7 @@ public class TDView extends SurfaceView implements Runnable{
                             }
 
                             beatsTapped += beatsCombo * currentMultiplier;
+
                             beats.get(beatIndex).tapped(text, toastColor);
                         }
                     }// end if beat was tapped

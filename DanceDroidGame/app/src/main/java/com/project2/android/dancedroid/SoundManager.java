@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.media.ToneGenerator;
 import android.util.Log;
 
 /**
@@ -29,6 +30,11 @@ public class SoundManager extends Activity {
         backgrnd1.start();
         backgrnd1.setLooping(true);
         Log.d(TAG, "Trying to play");
+    }
+
+    public void Beep(){
+        final ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+        tg.startTone(ToneGenerator.TONE_PROP_BEEP);
     }
 
     //when app is closed, music changes

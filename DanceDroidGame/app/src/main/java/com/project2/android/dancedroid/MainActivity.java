@@ -24,7 +24,6 @@ public class MainActivity extends Activity {
       //  getSystemService(Context.AUDIO_SERVICE).getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE);
         // Set up Play Button
 
-
         final ImageButton buttonPlay =
                 (ImageButton)findViewById(R.id.btnPlay);
         buttonPlay.setOnClickListener(new View.OnClickListener() {
@@ -35,19 +34,6 @@ public class MainActivity extends Activity {
                 startActivity(i);
                 finish();
 
-            }
-        });
-
-        // Set up Settings Button
-        final ImageButton buttonSettings =
-                (ImageButton)findViewById(R.id.btnSettings);
-        buttonSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create a new Intent object, and switch activities
-                Intent i = new Intent(MainActivity.this, Settings.class);
-                startActivity(i);
-                finish();
             }
         });
 
