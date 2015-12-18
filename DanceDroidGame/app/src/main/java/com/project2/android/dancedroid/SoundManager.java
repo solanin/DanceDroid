@@ -26,7 +26,7 @@ public class SoundManager extends Activity {
         backgrnd1 = MediaPlayer.create(context, id);
     }
 
-    public void PlayMusic(float speed){
+    public void PlayMusic(){
         backgrnd1.start();
         backgrnd1.setLooping(true);
         Log.d(TAG, "Trying to play");

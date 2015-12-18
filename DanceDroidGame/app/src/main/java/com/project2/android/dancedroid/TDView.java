@@ -145,6 +145,7 @@ public class TDView extends SurfaceView implements Runnable{
 
         // Get start time
         timeStarted = System.currentTimeMillis();
+
     }
 
     @Override
