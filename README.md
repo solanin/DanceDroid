@@ -7,4 +7,5 @@ Our idea is to create a DDR-esque reflex game that attracts players with bright 
 
 ##Credits
 All of our images were original and created by us
+
 Sound: The Piano Tune by Beat Doctor, Can be found here: http://tinyurl.com/ngbgmgt 
