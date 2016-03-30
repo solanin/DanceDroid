@@ -22,8 +22,9 @@ public class Game extends Activity {
 
         // The Game View
         gameView = new TDView(this, size.x, size.y);
+        SoundManager.getInstance().SetMusic(R.raw.pianowav, getApplicationContext());
         SoundManager.getInstance().PlayMusic();
-       setContentView(gameView);
+        setContentView(gameView);
     }
 
     @Override

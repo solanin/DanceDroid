@@ -164,7 +164,7 @@ public class TDView extends SurfaceView implements Runnable{
             gameEnded = true;
 
             //check for new fastest time
-            if(score < highScore) {
+            if(score > highScore) {
                 // Save high score
                 editor.putLong("highScore", score);
                 editor.commit();
